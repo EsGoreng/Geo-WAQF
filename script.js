@@ -1,7 +1,7 @@
-// SPA Controller untuk Geo-WAQF Dashboard
 class SPAController {
     constructor() {
         this.contentArea = document.getElementById('content-area');
+        this.pageTitle = document.getElementById('page-title'); // Target judul header
         this.navLinks = document.querySelectorAll('.nav-link');
         this.currentPage = null;
         this.cache = new Map();
@@ -13,7 +13,13 @@ class SPAController {
         // Load halaman awal
         const initialLink = document.querySelector('.nav-link.active');
         const initialPage = initialLink?.getAttribute('data-page') || 'page_home.html';
-        this.loadPage(initialPage);
+        
+        // Set judul awal
+        if (initialLink) {
+            this.updateActiveLink(initialLink, false); // Update link tanpa push state
+        }
+        
+        this.loadPage(initialPage, false);
         
         // Setup event listeners untuk navigasi
         this.setupNavigation();
@@ -21,6 +27,10 @@ class SPAController {
         // Handle browser back/forward
         window.addEventListener('popstate', (e) => {
             if (e.state && e.state.page) {
+                const newLink = document.querySelector(`.nav-link[data-page="${e.state.page}"]`);
+                if (newLink) {
+                    this.updateActiveLink(newLink, false);
+                }
                 this.loadPage(e.state.page, false);
             }
         });
@@ -33,8 +43,8 @@ class SPAController {
                 
                 const page = link.getAttribute('data-page');
                 if (page && page !== this.currentPage) {
-                    // Update active state
-                    this.updateActiveLink(link);
+                    // Update active state dan judul
+                    this.updateActiveLink(link, true);
                     
                     // Load page
                     this.loadPage(page, true);
@@ -43,9 +53,22 @@ class SPAController {
         });
     }
     
-    updateActiveLink(activeLink) {
+    updateActiveLink(activeLink, pushState = true) {
+        // Update status 'active' di sidebar
         this.navLinks.forEach(link => link.classList.remove('active'));
         activeLink.classList.add('active');
+        
+        // Update judul di header
+        const title = activeLink.querySelector('span:last-child').innerText;
+        if (this.pageTitle) {
+            this.pageTitle.innerText = title;
+        }
+
+        // Update browser history (jika bukan dari popstate)
+        if (pushState) {
+            const pageUrl = activeLink.getAttribute('data-page');
+            history.pushState({ page: pageUrl }, title, `#${pageUrl.replace('.html', '')}`);
+        }
     }
     
     async loadPage(pageUrl, pushState = true) {
@@ -53,50 +76,38 @@ class SPAController {
             // Show loading
             this.showLoading();
             
-            // Check cache first
             let html;
             if (this.cache.has(pageUrl)) {
                 html = this.cache.get(pageUrl);
             } else {
-                // Fetch page
                 const response = await fetch(pageUrl);
-                
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
                 html = await response.text();
-                // Cache the result
                 this.cache.set(pageUrl, html);
             }
             
-            // Parse HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             
-            // Extract main content
+            // Ekstrak konten <main> dari file fragmen
             const mainContent = doc.querySelector('main');
             
             if (mainContent) {
                 this.contentArea.innerHTML = mainContent.innerHTML;
             } else {
-                // Fallback: load entire body if no main tag
+                // Fallback jika tidak ada tag <main>
                 this.contentArea.innerHTML = doc.body.innerHTML;
-                console.warn(`Page ${pageUrl} doesn't have a <main> tag. Loading entire body.`);
+                console.warn(`Page ${pageUrl} doesn't have a <main> tag.`);
             }
             
-            // Update browser history
-            if (pushState) {
-                history.pushState({ page: pageUrl }, '', `#${pageUrl.replace('.html', '')}`);
-            }
-            
-            // Update current page
             this.currentPage = pageUrl;
             
-            // Re-initialize any scripts needed for the loaded page
+            // Inisialisasi skrip spesifik halaman jika ada
             this.initPageScripts();
             
-            // Hide loading
+            // Sembunyikan loading setelah konten dimuat
             this.hideLoading();
             
         } catch (error) {
@@ -106,35 +117,27 @@ class SPAController {
     }
     
     showLoading() {
-        const spinner = this.contentArea.querySelector('.loading-spinner');
-        if (spinner) {
-            spinner.classList.remove('hidden');
-        } else {
-            this.contentArea.innerHTML = `
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p>Memuat...</p>
-                </div>
-            `;
-        }
+        this.contentArea.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Memuat...</p>
+            </div>
+        `;
     }
     
     hideLoading() {
-        const spinner = this.contentArea.querySelector('.loading-spinner');
-        if (spinner) {
-            spinner.classList.add('hidden');
-            setTimeout(() => spinner.remove(), 300);
-        }
+        // Konten baru akan otomatis menggantikan spinner
+        // Fungsi ini bisa dikosongkan jika 'showLoading' menggantikan innerHTML
     }
     
     showError(message) {
         this.contentArea.innerHTML = `
-            <div style="padding: 2rem; text-align: center;">
-                <div style="color: #ef4444; font-size: 3rem; margin-bottom: 1rem;">
-                    <span class="material-symbols-outlined" style="font-size: 3rem;">error</span>
+            <div class="p-6 md:p-8 text-center">
+                <div class="text-red-500 mb-4">
+                    <span class="material-symbols-outlined" style="font-size: 48px;">error</span>
                 </div>
-                <h2 style="color: var(--text-primary); margin-bottom: 0.5rem;">Gagal Memuat Halaman</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">${message}</p>
+                <h2 class="text-xl font-semibold text-text-primary mb-2">Gagal Memuat Halaman</h2>
+                <p class="text-text-secondary mb-6">${message}</p>
                 <button onclick="location.reload()" 
                         style="background-color: var(--accent); color: var(--bg-dark); 
                                padding: 0.75rem 1.5rem; border-radius: 0.5rem; 
@@ -146,23 +149,11 @@ class SPAController {
     }
     
     initPageScripts() {
-        // Initialize any interactive elements in the loaded page
-        // For example: charts, maps, form handlers, etc.
-        
-        // Example: Re-attach event listeners for dynamic content
-        const buttons = this.contentArea.querySelectorAll('button[data-action]');
-        buttons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const action = e.target.getAttribute('data-action');
-                this.handleAction(action);
-            });
-        });
+        // Tempat untuk inisialisasi chart, map, dll. setelah halaman dimuat
     }
     
     handleAction(action) {
-        // Handle custom actions from loaded pages
         console.log('Action triggered:', action);
-        // Add your custom action handlers here
     }
     
     clearCache() {
@@ -171,18 +162,7 @@ class SPAController {
     }
 }
 
-// Initialize SPA when DOM is ready
+// Inisialisasi SPA ketika DOM siap
 document.addEventListener('DOMContentLoaded', () => {
     window.spaController = new SPAController();
 });
-
-// Utility function to get query parameters
-function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Utility function for smooth scroll
-function smoothScrollTo(element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}

@@ -12,17 +12,18 @@
     <link rel="stylesheet" href="style.css">
     
     <script>
+      // Konfigurasi Tailwind terpusat (Tema Hijau)
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
             colors: {
-              primary: "#11d411",
-              "background-light": "#f6f8f6",
-              "background-dark": "#102210",
-              "card-dark": "#162b16",
+              primary: "#11d411", // Aksen hijau utama
+              "background-dark": "#102210", // Latar belakang utama
+              "card-dark": "#162b16", // Latar belakang kartu
               "text-primary": "#ffffff",
-              "text-secondary": "#92c992"
+              "text-secondary": "#92c992",
+              "border-color": "#234823", // Warna border
             },
             fontFamily: {
               display: ["Inter", "sans-serif"],
@@ -31,24 +32,31 @@
         },
       };
     </script>
+    <style>
+      /* Style untuk ikon material symbol yang 'filled' */
+      .material-symbols-outlined.fill {
+        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+    </style>
 </head>
 <body class="bg-background-dark text-text-primary font-display">
-    <div class="container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo bg-primary"></div>
+    
+    <div class="flex h-screen w-full">
+        <aside class="sidebar w-64 bg-card-dark border-r border-border-color flex flex-col p-4 flex-shrink-0">
+            <div class="sidebar-header flex items-center gap-3 pb-6 border-b border-border-color mb-6">
+                <div class="logo bg-primary w-10 h-10 rounded-full flex-shrink-0"></div>
                 <div class="logo-text">
-                    <h1>Geo-WAQF</h1>
-                    <p>Geospatial-Fintech</p>
+                    <h1 class="text-lg font-bold text-text-primary">Geo-WAQF</h1>
+                    <p class="text-sm text-text-secondary">Geospatial-Fintech</p>
                 </div>
             </div>
             
-            <nav class="sidebar-nav">
-                <ul>
+            <nav class="sidebar-nav flex-grow">
+                <ul class="flex flex-col gap-2">
                     <li>
                         <a href="#" data-page="page_home.html" class="nav-link active">
                             <span class="material-symbols-outlined">dashboard</span>
-                            <span>Dashboard</span>
+                            <span>Dasbor</span>
                         </a>
                     </li>
                     <li>
@@ -84,12 +92,35 @@
             </div>
         </aside>
 
-        <main id="content-area" class="content-area">
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-                <p>Memuat...</p>
-            </div>
-        </main>
+        <div class="flex-1 flex flex-col h-screen">
+            
+            <header class="flex items-center justify-between sticky top-0 bg-background-dark/95 backdrop-blur-sm z-10 border-b border-border-color px-6 md:px-8 py-4 flex-shrink-0">
+                <h2 id="page-title" class="text-white text-xl md:text-2xl font-bold leading-tight">
+                  Dasbor
+                </h2>
+                <div class="flex items-center gap-3 md:gap-4">
+                  <button class="text-text-secondary hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                  </button>
+                  <div class="flex items-center gap-3">
+                    <div class="bg-primary rounded-full w-10 h-10 flex items-center justify-center text-background-dark font-bold">
+                      BS
+                    </div>
+                    <div class="text-right hidden sm:block">
+                      <p class="text-sm font-semibold text-white">Budi Santoso</p>
+                      <p class="text-xs text-text-secondary">Admin</p>
+                    </div>
+                  </div>
+                </div>
+            </header>
+
+            <main id="content-area" class="content-area flex-1 overflow-y-auto">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Memuat...</p>
+                </div>
+            </main>
+        </div>
     </div>
     
     <script src="script.js"></script>

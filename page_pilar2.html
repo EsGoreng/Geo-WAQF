@@ -1,232 +1,86 @@
-<!DOCTYPE html>
-
-<html class="dark" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Geo-WAQF - Precision Monitoring</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#11d411",
-              "background-light": "#f6f8f6",
-              "background-dark": "#102210",
-            },
-            fontFamily: {
-              display: ["Inter", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
-    </style>
-  </head>
-  <body class="bg-background-light dark:bg-background-dark font-display">
-    <div class="flex h-screen w-full">
-      <!-- SideNavBar -->
-      <aside class="flex flex-col w-64 bg-[#0a180a] p-4 text-white">
-        <div class="flex flex-col justify-between h-full">
-          <div class="flex flex-col gap-6">
-            <div class="flex items-center gap-3 px-2">
-              <div
-                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                data-alt="Geo-WAQF logo with a leaf inside a circle"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAm5qaRIhfct29octHho4oLwJAFt4bj5AE62ID8cfXVJyghrLCsWuKmZrznD9ky0MyT60JhwQODVXoFGThE_3X9C-lo_Dg3vwCjcKG6mi-W0-Ck2dzGOqOBwQk-D3at6SsvuKx-naMi1pFeAX9ufkUCLIY1MIfVeCefEsvYUKOHFGSzxunIdWg9sNu0z9LeDpgrwlBP76QCeEkRb9rG6b46nu8PK7uiylbZNwL2GqncTpIlq30JWQXidWWmz-dKdzMXFQ3Jf3fXvzQ');
-                "
-              ></div>
-              <div class="flex flex-col">
-                <h1 class="text-white text-base font-medium leading-normal">
-                  Geo-WAQF
-                </h1>
-                <p class="text-[#92c992] text-sm font-normal leading-normal">
-                  Peatland Restoration
-                </p>
-              </div>
-            </div>
-            <nav class="flex flex-col gap-2">
-              <a
-                class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#234823]/50 rounded-lg"
-                href="#"
-              >
-                <span class="material-symbols-outlined">square</span>
-                <p class="text-sm font-medium leading-normal">Dashboard</p>
-              </a>
-              <a
-                class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#234823]/50 rounded-lg"
-                href="#"
-              >
-                <span class="material-symbols-outlined">map</span>
-                <p class="text-sm font-medium leading-normal">
-                  Pillar 1: Land Acquisition
-                </p>
-              </a>
-              <a
-                class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#234823]"
-                href="#"
-              >
-                <span
-                  class="material-symbols-outlined fill"
-                  style="font-variation-settings: 'FILL' 1"
-                  >monitoring</span
-                >
-                <p class="text-white text-sm font-medium leading-normal">
-                  Pillar 2: Precision Monitoring
-                </p>
-              </a>
-              <a
-                class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#234823]/50 rounded-lg"
-                href="#"
-              >
-                <span class="material-symbols-outlined">groups</span>
-                <p class="text-sm font-medium leading-normal">
-                  Pillar 3: Community Empowerment
-                </p>
-              </a>
-              <a
-                class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#234823]/50 rounded-lg"
-                href="#"
-              >
-                <span class="material-symbols-outlined">article</span>
-                <p class="text-sm font-medium leading-normal">Reports</p>
-              </a>
-            </nav>
-          </div>
-          <div class="flex flex-col gap-1">
-            <a
-              class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#234823]/50 rounded-lg"
-              href="#"
-            >
-              <span class="material-symbols-outlined">settings</span>
-              <p class="text-sm font-medium leading-normal">Settings</p>
-            </a>
-            <a
-              class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#234823]/50 rounded-lg"
-              href="#"
-            >
-              <span class="material-symbols-outlined">help</span>
-              <p class="text-sm font-medium leading-normal">Help</p>
-            </a>
-          </div>
-        </div>
-      </aside>
-      <!-- Main Content -->
-      <main class="flex-1 flex flex-col h-screen overflow-y-auto">
-        <div class="p-8">
-          <!-- PageHeading -->
-          <div class="flex flex-wrap justify-between gap-3 mb-6">
-            <div class="flex min-w-72 flex-col gap-2">
-              <p
-                class="text-white text-4xl font-black leading-tight tracking-[-0.033em]"
-              >
-                Pillar 2: Precision Monitoring
-              </p>
-              <p class="text-[#92c992] text-base font-normal leading-normal">
-                Click on an area on the map to see the detailed trend analysis.
-              </p>
-            </div>
-          </div>
-          <!-- Split View Layout -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Left Panel: Map -->
-            <div class="bg-[#0a180a] rounded-xl p-4 flex flex-col">
-              <div
-                class="w-full h-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
-                data-alt="Geospatial map of Riau showing several highlighted peatland restoration areas with different color polygons."
-                data-location="Riau, Indonesia"
-                style="
-                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjbvwMdMHozg8668ei1sg--Vyqw3qmo_Ed0qjE3rjvSJLe_VmB7SbvWLtcjvcgAKs3WAsatwmBvCj2ykBWaMhLTD3tCN-Xl5YIHm3A6dz6m3bjmo4CowkmxzD-eIQvVC5mmUE8GdkMECfCQcGa0QspnJskObAIT0zpxrXw5CO-QNvimetrSYBWkFdB_FEjwU74aTfELdLw079n1PL8CS2JxJrQ4y5agMdnmo9MU2WZxfnZJLKhKcwpZr6tWh2ktu1g9mOS6lhiQTI');
-                "
-              ></div>
-            </div>
-            <!-- Right Panel: Data Visualization -->
-            <div class="flex flex-col gap-6">
-              <div class="bg-[#0a180a] rounded-xl p-6 flex flex-col gap-4">
-                <!-- SectionHeader -->
-                <div class="flex justify-between items-center">
-                  <h2
-                    class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]"
-                  >
-                    Trend Analysis: Riau Restoration Block-01
-                  </h2>
-                  <!-- Chips / Filter -->
-                  <button
-                    class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#234823] pl-4 pr-2"
-                  >
-                    <p class="text-white text-sm font-medium leading-normal">
-                      Last 12 Months
-                    </p>
-                    <span
-                      class="material-symbols-outlined text-white text-[20px]"
-                      >expand_more</span
-                    >
-                  </button>
-                </div>
-                <!-- NDVI Chart -->
-                <div class="flex flex-col gap-2">
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-white">
-                      Greenness Index (NDVI)
-                    </h3>
-                    <div class="flex items-center gap-2">
-                      <div class="w-3 h-3 rounded-full bg-[#11d411]"></div>
-                      <span class="text-sm text-gray-400">NDVI Trend</span>
-                    </div>
-                  </div>
-                  <div
-                    class="bg-center bg-no-repeat aspect-[16/7] bg-contain rounded-lg"
-                    data-alt="Line chart showing a positive upward trend for NDVI over a 12-month period, with a vertical dashed line indicating the start of an intervention."
-                    style="
-                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSsuKKqGwTjF7svjWqM9HxYmsLvDxhXaxMmFvnieyBFcFxRsxfnrSBmDdX0YivDsE1fmDZR7ZH8aYrzI8By0G2oQsZgbnZJsVUcDAJIA-pkVFIQxYGHcatN-fhrAn8RZSFUFmOjS8-G-RSHmKhpPOdRrSITC1RJqsu5LelGHxBfkPZAuz2w5NIlKulldj56_UMRGMoI7-_L2U0kLJ1wgnMIshCf_f7tdNktWe1zez0l-YvePONXjLAWOnetej8wNiSlFsISJCv01M');
-                    "
-                  ></div>
-                </div>
-                <!-- NDWI Chart -->
-                <div class="flex flex-col gap-2">
-                  <div class="flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-white">
-                      Wetness Index (NDWI)
-                    </h3>
-                    <div class="flex items-center gap-2">
-                      <div class="w-3 h-3 rounded-full bg-[#3b82f6]"></div>
-                      <span class="text-sm text-gray-400">NDWI Trend</span>
-                    </div>
-                  </div>
-                  <div
-                    class="bg-center bg-no-repeat aspect-[16/7] bg-contain rounded-lg"
-                    data-alt="Line chart showing a positive upward trend for NDWI over a 12-month period, with a vertical dashed line indicating the start of an intervention."
-                    style="
-                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCceVFgh48UV95_eMwZrRs0hlKVbXddSwadMgjGO8yCg6uLKyLHuPxnFp0bo-glovD1a9Iq9krdzmg0Ja7YPfdc9NmMWpH6dPSPFCkHTmFrjFLvzgpDyhibk3MwRP-L4S6qr93jJ5uoZn25sw9q6ilP-1el-sJYiUGELMMx8hd2kRPfK5ZO5L5FpGtJzxf4ImeNxXjyqXKa7dxfhWY5oR8bCfLa8kCIY9oBV7Ttkb_V6to-ZZTKIuzjKcyyOVsfykig6IjMZDdffeI');
-                    "
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+<main class="flex-1 flex flex-col">
+  <div class="p-8">
+    <div class="flex flex-wrap justify-between gap-3 mb-6">
+      <div class="flex min-w-72 flex-col gap-2">
+        <p
+          class="text-white text-4xl font-black leading-tight tracking-[-0.033em]"
+        >
+          Pilar 2: Monitoring Presisi
+        </p>
+        <p class="text-text-secondary text-base font-normal leading-normal">
+          Klik pada area di peta untuk melihat analisis tren mendetail.
+        </p>
+      </div>
     </div>
-  </body>
-</html>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-card-dark rounded-xl p-4 flex flex-col border border-border-color">
+        <div
+          class="w-full h-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
+          data-alt="Peta geospasial Riau menunjukkan beberapa area restorasi gambut"
+          data-location="Riau, Indonesia"
+          style="
+            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjbvwMdMHozg8668ei1sg--Vyqw3qmo_Ed0qjE3rjvSJLe_VmB7SbvWLtcjvcgAKs3WAsatwmBvCj2ykBWaMhLTD3tCN-Xl5YIHm3A6dz6m3bjmo4CowkmxzD-eIQvVC5mmUE8GdkMECfCQcGa0QspnJskObAIT0zpxrXw5CO-QNvimetrSYBWkFdB_FEjwU74aTfELdLw079n1PL8CS2JxJrQ4y5agMdnmo9MU2WZxfnZJLKhKcwpZr6tWh2ktu1g9mOS6lhiQTI');
+          "
+        ></div>
+      </div>
+      <div class="flex flex-col gap-6">
+        <div class="bg-card-dark rounded-xl p-6 flex flex-col gap-4 border border-border-color">
+          <div class="flex justify-between items-center">
+            <h2
+              class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]"
+            >
+              Analisis Tren: Blok Restorasi Riau-01
+            </h2>
+            <button
+              class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-border-color pl-4 pr-2 hover:bg-primary/20"
+            >
+              <p class="text-white text-sm font-medium leading-normal">
+                12 Bulan Terakhir
+              </p>
+              <span
+                class="material-symbols-outlined text-white text-[20px]"
+                >expand_more</span
+              >
+            </button>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-semibold text-white">
+                Indeks Kehijauan (NDVI)
+              </h3>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-primary"></div>
+                <span class="text-sm text-gray-400">Tren NDVI</span>
+              </div>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-[16/7] bg-contain rounded-lg"
+              data-alt="Grafik garis menunjukkan tren NDVI positif ke atas selama 12 bulan"
+              style="
+                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSsuKKqGwTjF7svjWqM9HxYmsLvDxhXaxMmFvnieyBFcFxRsxfnrSBmDdX0YivDsE1fmDZR7ZH8aYrzI8By0G2oQsZgbnZJsVUcDAJIA-pkVFIQxYGHcatN-fhrAn8RZSFUFmOjS8-G-RSHmKhpPOdRrSITC1RJqsu5LelGHxBfkPZAuz2w5NIlKulldj56_UMRGMoI7-_L2U0kLJ1wgnMIshCf_f7tdNktWe1zez0l-YvePONXjLAWOnetej8wNiSlFsISJCv01M');
+              "
+            ></div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-semibold text-white">
+                Indeks Kebasahan (NDWI)
+              </h3>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-[#3b82f6]"></div>
+                <span class="text-sm text-gray-400">Tren NDWI</span>
+              </div>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-[16/7] bg-contain rounded-lg"
+              data-alt="Grafik garis menunjukkan tren NDWI positif ke atas selama 12 bulan"
+              style="
+                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCceVFgh48UV95_eMwZrRs0hlKVbXddSwadMgjGO8yCg6uLKyLHuPxnFp0bo-glovD1a9Iq9krdzmg0Ja7YPfdc9NmMWpH6dPSPFCkHTmFrjFLvzgpDyhibk3MwRP-L4S6qr93jJ5uoZn25sw9q6ilP-1el-sJYiUGELMMx8hd2kRPfK5ZO5L5FpGtJzxf4ImeNxXjyqXKa7dxfhWY5oR8bCfLa8kCIY9oBV7Ttkb_V6to-ZZTKIuzjKcyyOVsfykig6IjMZDdffeI');
+              "
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

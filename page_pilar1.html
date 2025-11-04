@@ -1,408 +1,214 @@
-<!DOCTYPE html>
-
-<html class="dark" lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Geo-WAQF - Smart Planning Dashboard</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#11d411",
-              "background-light": "#f6f8f6",
-              "background-dark": "#102210",
-            },
-            fontFamily: {
-              display: ["Inter", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      .material-symbols-outlined {
-        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-      }
-    </style>
-  </head>
-  <body class="bg-background-light dark:bg-background-dark font-display">
-    <div class="relative flex min-h-screen w-full">
-      <!-- SideNavBar -->
-      <aside
-        class="flex h-screen flex-col justify-between bg-[#112211] p-4 w-64 sticky top-0"
-      >
-        <div class="flex flex-col gap-4">
-          <div class="flex items-center gap-3">
-            <div
-              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-              data-alt="Geo-WAQF logo"
-              style="
-                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj-Ra7bGzELSSVkKgCnv-YVdfJ6-wSSVWcS2y_a9ej_ndh-spW3LNSR2XAfuDE8WEVL4kwpKeMrXAYECPThKEoZzK2QqIQ2IUMvXj1QuUyURES7ecKLlMnzPFkASRRNZutKZSsahNjgAP1AL2S-Yul_1aXaOxsMTlenGSn_DjtCmxK5UTEVbXp40j-A5-2EUXdryCyf9Tporfmu527PIzVBhKLmPAgdV7NT5H-zauTjg841DBnCS4LVAXB9arLxa3DkvfQZcg0xwQ');
-              "
-            ></div>
-            <div class="flex flex-col">
-              <h1 class="text-white text-base font-medium leading-normal">
-                Geo-WAQF Admin
-              </h1>
-              <p class="text-[#92c992] text-sm font-normal leading-normal">
-                user@geowaqf.org
-              </p>
-            </div>
-          </div>
-          <nav class="flex flex-col gap-2">
-            <a
-              class="flex items-center gap-3 px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
-              href="#"
-            >
-              <span class="material-symbols-outlined">dashboard</span>
-              <p class="text-sm font-medium leading-normal">Dashboard</p>
-            </a>
-            <a
-              class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#234823] text-white"
-              href="#"
-            >
-              <span
-                class="material-symbols-outlined"
-                style="font-variation-settings: 'FILL' 1"
-                >map</span
-              >
-              <p class="text-sm font-medium leading-normal">Smart Planning</p>
-            </a>
-            <a
-              class="flex items-center gap-3 px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
-              href="#"
-            >
-              <span class="material-symbols-outlined">bar_chart</span>
-              <p class="text-sm font-medium leading-normal">Monitoring</p>
-            </a>
-            <a
-              class="flex items-center gap-3 px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
-              href="#"
-            >
-              <span class="material-symbols-outlined">article</span>
-              <p class="text-sm font-medium leading-normal">Reporting</p>
-            </a>
-          </nav>
-        </div>
-        <div class="flex flex-col gap-4">
-          <button
-            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-[#112211] text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity"
-          >
-            <span class="truncate">New Project</span>
-          </button>
-          <div class="flex flex-col gap-1">
-            <a
-              class="flex items-center gap-3 px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
-              href="#"
-            >
-              <span class="material-symbols-outlined">settings</span>
-              <p class="text-sm font-medium leading-normal">Settings</p>
-            </a>
-            <a
-              class="flex items-center gap-3 px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
-              href="#"
-            >
-              <span class="material-symbols-outlined">logout</span>
-              <p class="text-sm font-medium leading-normal">Logout</p>
-            </a>
-          </div>
-        </div>
-      </aside>
-      <!-- Main Content -->
-      <main class="flex-1 flex">
-        <!-- Left Panel for Controls -->
-        <div
-          class="w-[380px] h-screen overflow-y-auto p-6 bg-[#162b16] flex-shrink-0 sticky top-0"
-        >
-          <div class="flex flex-col gap-6">
-            <!-- SectionHeader: MCE Control -->
-            <div>
-              <h2
-                class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3"
-              >
-                Multi-Criteria Analysis (MCE) Control
-              </h2>
-              <div class="h-px bg-white/20"></div>
-            </div>
-            <!-- Sliders -->
-            <div class="flex flex-col gap-4">
-              <div class="relative flex w-full flex-col items-start gap-3">
-                <div
-                  class="flex w-full shrink-[3] items-center justify-between"
-                >
-                  <p class="text-white text-base font-medium leading-normal">
-                    Degradation Level
-                  </p>
-                  <p class="text-white text-sm font-normal leading-normal">
-                    80%
-                  </p>
-                </div>
-                <div class="flex h-4 w-full items-center gap-4">
-                  <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-                    <div class="h-full w-[80%] rounded-sm bg-primary"></div>
-                    <div class="relative">
-                      <div
-                        class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="relative flex w-full flex-col items-start gap-3">
-                <div
-                  class="flex w-full shrink-[3] items-center justify-between"
-                >
-                  <p class="text-white text-base font-medium leading-normal">
-                    Hydrology
-                  </p>
-                  <p class="text-white text-sm font-normal leading-normal">
-                    65%
-                  </p>
-                </div>
-                <div class="flex h-4 w-full items-center gap-4">
-                  <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-                    <div class="h-full w-[65%] rounded-sm bg-primary"></div>
-                    <div class="relative">
-                      <div
-                        class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="relative flex w-full flex-col items-start gap-3">
-                <div
-                  class="flex w-full shrink-[3] items-center justify-between"
-                >
-                  <p class="text-white text-base font-medium leading-normal">
-                    Socio-Economic
-                  </p>
-                  <p class="text-white text-sm font-normal leading-normal">
-                    40%
-                  </p>
-                </div>
-                <div class="flex h-4 w-full items-center gap-4">
-                  <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-                    <div class="h-full w-[40%] rounded-sm bg-primary"></div>
-                    <div class="relative">
-                      <div
-                        class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="relative flex w-full flex-col items-start gap-3">
-                <div
-                  class="flex w-full shrink-[3] items-center justify-between"
-                >
-                  <p class="text-white text-base font-medium leading-normal">
-                    Accessibility
-                  </p>
-                  <p class="text-white text-sm font-normal leading-normal">
-                    75%
-                  </p>
-                </div>
-                <div class="flex h-4 w-full items-center gap-4">
-                  <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-                    <div class="h-full w-[75%] rounded-sm bg-primary"></div>
-                    <div class="relative">
-                      <div
-                        class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Control Buttons -->
-            <div class="flex gap-3">
-              <button
-                class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-[#112211] text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity"
-              >
-                <span class="truncate">Apply Filters</span>
-              </button>
-              <button
-                class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#326732] text-white text-sm font-medium leading-normal hover:bg-[#4a8a4a] transition-colors"
-              >
-                <span class="truncate">Reset</span>
-              </button>
-            </div>
-            <!-- Ranked List -->
-            <div class="flex flex-col gap-4 pt-4">
-              <div>
-                <h2
-                  class="text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-3"
-                >
-                  Top 10 Intervention Recommendations
-                </h2>
-                <div class="h-px bg-white/20"></div>
-              </div>
-              <div class="flex flex-col">
-                <div
-                  class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-2 text-xs font-bold uppercase text-[#92c992] border-b border-white/10"
-                >
-                  <span>#</span>
-                  <span>Location</span>
-                  <span>Score</span>
-                </div>
-                <div class="flex flex-col">
-                  <div
-                    class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white bg-primary/20 rounded-lg my-1 cursor-pointer"
-                  >
-                    <span>1</span>
-                    <span>Desa Sungai Berkah</span>
-                    <span>9.8</span>
-                  </div>
-                  <div
-                    class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <span>2</span>
-                    <span>Kec. Gambut Jaya</span>
-                    <span>9.5</span>
-                  </div>
-                  <div
-                    class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <span>3</span>
-                    <span>Area Konservasi Riau</span>
-                    <span>9.2</span>
-                  </div>
-                  <div
-                    class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <span>4</span>
-                    <span>Desa Makmur Sejati</span>
-                    <span>8.9</span>
-                  </div>
-                  <div
-                    class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <span>5</span>
-                    <span>Blok Hutan Lindung</span>
-                    <span>8.7</span>
-                  </div>
-                  <div
-                    class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <span>6</span>
-                    <span>Pesisir Timur Sumatra</span>
-                    <span>8.4</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Right Panel for Map -->
-        <div class="flex-1 flex flex-col p-6">
-          <!-- PageHeading -->
-          <div class="flex flex-wrap justify-between gap-3 mb-6">
-            <div class="flex min-w-72 flex-col gap-2">
-              <p
-                class="text-white text-4xl font-black leading-tight tracking-[-0.033em]"
-              >
-                Pillar 1: Smart Planning &amp; Intervention Priority
-              </p>
-              <p class="text-[#92c992] text-base font-normal leading-normal">
-                Use the Multi-Criteria Analysis controls to filter and rank
-                intervention areas on the map.
-              </p>
-            </div>
-          </div>
-          <!-- Map -->
-          <div class="relative flex flex-col flex-1">
-            <div
-              class="bg-cover bg-center flex min-h-[320px] flex-1 flex-col justify-between p-6 rounded-xl"
-              data-alt="A map of a peatland restoration area with color-coded priority zones: red for high, yellow for medium, and green for low priority."
-              data-location="Kalimantan, Indonesia"
-              style="
-                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBM0C7pf6cNIkgd8umLQ59sKVyFy67R7f2y3CKhZn0OtCxXvZBE7rwh4kBwW5KIAJludDRHNr6D7FsVm3r6t0W715rf9bRp4w5CKXuTa-8vbHEVOsR86y77Alb8aFr8nKeo-EpUClwZCaN2_6saqrKeQfs0JjqW5f7d3WAT_x2vPtX4_Yu9G1Yw9NsI4u2GR4_vAeUw24W4QsNlPr3FSPgW0_fJBe-t27ZRFbDlqtG6aLSjGLKWqZ9byypVJ4aNBFEs1Vdem_l-alw');
-              "
-            >
-              <div class="flex justify-between">
-                <label class="flex flex-col min-w-40 h-12 w-1/3 max-w-sm">
-                  <div
-                    class="flex w-full flex-1 items-stretch rounded-lg h-full"
-                  >
-                    <div
-                      class="text-[#92c992] flex border-none bg-[#193319] items-center justify-center pl-4 rounded-l-lg border-r-0"
-                    >
-                      <span class="material-symbols-outlined">search</span>
-                    </div>
-                    <input
-                      class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#193319] focus:border-none h-full placeholder:text-[#92c992] px-4 text-base font-normal leading-normal"
-                      placeholder="Search Location"
-                      value=""
-                    />
-                  </div>
-                </label>
-                <!-- Map Legend -->
-                <div
-                  class="bg-[#193319] p-3 rounded-lg flex flex-col gap-2 w-48 shadow-lg"
-                >
-                  <h3 class="text-white font-bold text-sm">Legend</h3>
-                  <div class="flex items-center gap-2">
-                    <div class="w-4 h-4 rounded bg-[#D7263D]"></div>
-                    <span class="text-white text-xs">High Priority</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="w-4 h-4 rounded bg-[#F4A261]"></div>
-                    <span class="text-white text-xs">Medium Priority</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="w-4 h-4 rounded bg-[#2A9D8F]"></div>
-                    <span class="text-white text-xs">Low Priority</span>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col items-end gap-3">
-                <div class="flex flex-col gap-0.5">
-                  <button
-                    class="flex size-10 items-center justify-center rounded-t-lg bg-[#193319] shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:bg-[#234823] transition-colors"
-                  >
-                    <span class="material-symbols-outlined text-white"
-                      >add</span
-                    >
-                  </button>
-                  <button
-                    class="flex size-10 items-center justify-center rounded-b-lg bg-[#193319] shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:bg-[#234823] transition-colors"
-                  >
-                    <span class="material-symbols-outlined text-white"
-                      >remove</span
-                    >
-                  </button>
-                </div>
-                <button
-                  class="flex size-10 items-center justify-center rounded-lg bg-[#193319] shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:bg-[#234823] transition-colors"
-                >
-                  <span class="material-symbols-outlined text-white"
-                    >navigation</span
-                  >
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+<main class.="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_380px] h-full">
+  
+  <div class="flex-1 flex flex-col p-6">
+    <div class="flex flex-wrap justify-between gap-3 mb-6">
+      <div class="flex min-w-72 flex-col gap-2">
+        <p class="text-text-secondary text-base font-normal leading-normal">
+          Gunakan kontrol Analisis Multi-Kriteria untuk memfilter dan memeringkat area intervensi di peta.
+        </p>
+      </div>
     </div>
-  </body>
-</html>
+    
+    <div class="relative flex flex-col flex-1">
+      <div
+        class="bg-cover bg-center flex min-h-[320px] flex-1 flex-col justify-between p-6 rounded-xl border border-border-color"
+        data-alt="Peta area restorasi gambut dengan zona prioritas berwarna"
+        data-location="Kalimantan, Indonesia"
+        style="
+          background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBM0C7pf6cNIkgd8umLQ59sKVyFy67R7f2y3CKhZn0OtCxXvZBE7rwh4kBwW5KIAJludDRHNr6D7FsVm3r6t0W715rf9bRp4w5CKXuTa-8vbHEVOsR86y77Alb8aFr8nKeo-EpUClwZCaN2_6saqrKeQfs0JjqW5f7d3WAT_x2vPtX4_Yu9G1Yw9NsI4u2GR4_vAeUw24W4QsNlPr3FSPgW0_fJBe-t27ZRFbDlqtG6aLSjGLKWqZ9byypVJ4aNBFEs1Vdem_l-alw');
+        "
+      >
+        <div class="flex justify-between">
+          <label class="flex flex-col min-w-40 h-12 w-1/3 max-w-sm">
+            <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+              <div class="text-text-secondary flex border-none bg-card-dark items-center justify-center pl-4 rounded-l-lg border-r-0">
+                <span class="material-symbols-outlined">search</span>
+              </div>
+              <input
+                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-0 border-none bg-card-dark focus:border-none h-full placeholder:text-text-secondary px-4 text-base font-normal leading-normal"
+                placeholder="Cari Lokasi"
+                value=""
+              />
+            </div>
+          </label>
+          
+          <div class="bg-card-dark/95 backdrop-blur-sm p-3 rounded-lg flex flex-col gap-2 w-48 shadow-lg border border-border-color">
+            <h3 class="text-white font-bold text-sm">Legenda</h3>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded bg-[#D7263D]"></div>
+              <span class="text-white text-xs">Prioritas Tinggi</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded bg-[#F4A261]"></div>
+              <span class="text-white text-xs">Prioritas Sedang</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 rounded bg-[#2A9D8F]"></div>
+              <span class="text-white text-xs">Prioritas Rendah</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex flex-col items-end gap-3">
+          <div class="flex flex-col gap-0.5">
+            <button class="flex size-10 items-center justify-center rounded-t-lg bg-card-dark shadow-lg hover:bg-border-color transition-colors">
+              <span class="material-symbols-outlined text-white">add</span>
+            </button>
+            <button class="flex size-10 items-center justify-center rounded-b-lg bg-card-dark shadow-lg hover:bg-border-color transition-colors">
+              <span class="material-symbols-outlined text-white">remove</span>
+            </button>
+          </div>
+          <button class="flex size-10 items-center justify-center rounded-lg bg-card-dark shadow-lg hover:bg-border-color transition-colors">
+            <span class="material-symbols-outlined text-white">navigation</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full h-full overflow-y-auto p-6 bg-card-dark flex-shrink-0 lg:border-l border-border-color">
+    <div class="flex flex-col gap-6">
+      <div>
+        <h2
+          class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3"
+        >
+          Kontrol Analisis Multi-Kriteria (MCE)
+        </h2>
+        <div class="h-px bg-border-color"></div>
+      </div>
+      
+      <div class="flex flex-col gap-4">
+        <div class="relative flex w-full flex-col items-start gap-3">
+          <div class="flex w-full shrink-[3] items-center justify-between">
+            <p class="text-white text-base font-medium leading-normal">
+              Tingkat Degradasi
+            </p>
+            <p class="text-white text-sm font-normal leading-normal">
+              80%
+            </p>
+          </div>
+          <div class="flex h-4 w-full items-center gap-4">
+            <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
+              <div class="h-full w-[80%] rounded-sm bg-primary"></div>
+              <div class="relative">
+                <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative flex w-full flex-col items-start gap-3">
+          <div class="flex w-full shrink-[3] items-center justify-between">
+            <p class="text-white text-base font-medium leading-normal">
+              Hidrologi
+            </p>
+            <p class="text-white text-sm font-normal leading-normal">
+              65%
+            </p>
+          </div>
+          <div class="flex h-4 w-full items-center gap-4">
+            <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
+              <div class="h-full w-[65%] rounded-sm bg-primary"></div>
+              <div class="relative">
+                <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative flex w-full flex-col items-start gap-3">
+          <div class="flex w-full shrink-[3] items-center justify-between">
+            <p class="text-white text-base font-medium leading-normal">
+              Sosial-Ekonomi
+            </p>
+            <p class="text-white text-sm font-normal leading-normal">
+              40%
+            </p>
+          </div>
+          <div class="flex h-4 w-full items-center gap-4">
+            <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
+              <div class="h-full w-[40%] rounded-sm bg-primary"></div>
+              <div class="relative">
+                <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative flex w-full flex-col items-start gap-3">
+          <div class="flex w-full shrink-[3] items-center justify-between">
+            <p class="text-white text-base font-medium leading-normal">
+              Aksesibilitas
+            </p>
+            <p class="text-white text-sm font-normal leading-normal">
+              75%
+            </p>
+          </div>
+          <div class="flex h-4 w-full items-center gap-4">
+            <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
+              <div class="h-full w-[75%] rounded-sm bg-primary"></div>
+              <div class="relative">
+                <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex gap-3">
+        <button class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-background-dark text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
+          <span class="truncate">Terapkan Filter</span>
+        </button>
+        <button class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#326732] text-white text-sm font-medium leading-normal hover:bg-[#4a8a4a] transition-colors">
+          <span class="truncate">Reset</span>
+        </button>
+      </div>
+      
+      <div class="flex flex-col gap-4 pt-4">
+        <div>
+          <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-3">
+            Top 10 Rekomendasi Intervensi
+          </h2>
+          <div class="h-px bg-border-color"></div>
+        </div>
+        <div class="flex flex-col">
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-2 text-xs font-bold uppercase text-text-secondary border-b border-border-color">
+            <span>#</span>
+            <span>Lokasi</span>
+            <span>Skor</span>
+          </div>
+          <div class="flex flex-col">
+            <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white bg-primary/20 rounded-lg my-1 cursor-pointer">
+              <span>1</span>
+              <span>Desa Sungai Berkah</span>
+              <span>9.8</span>
+            </div>
+            <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+              <span>2</span>
+              <span>Kec. Gambut Jaya</span>
+              <span>9.5</span>
+            </div>
+            <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+              <span>3</span>
+              <span>Area Konservasi Riau</span>
+              <span>9.2</span>
+            </div>
+            <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+              <span>4</span>
+              <span>Desa Makmur Sejati</span>
+              <span>8.9</span>
+            </div>
+            <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+              <span>5</span>
+              <span>Blok Hutan Lindung</span>
+              <span>8.7</span>
+            </div>
+            <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+              <span>6</span>
+              <span>Pesisir Timur Sumatra</span>
+              <span>8.4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
