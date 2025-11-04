@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Geo-WAQF - Carbon Validation</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        font-size: 24px;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1152d4",
+              "background-light": "#f6f6f8",
+              "background-dark": "#0A1931",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-background-light dark:bg-background-dark font-display">
+    <div class="relative flex min-h-screen w-full">
+      <!-- SideNavBar -->
+      <aside class="flex h-screen flex-col bg-[#101622] p-4 sticky top-0">
+        <div class="flex h-full min-h-[700px] w-56 flex-col justify-between">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-3 px-3">
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                data-alt="Geo-WAQF company logo"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2j1qzcjuBaGTOB_3isJafs1hTc9JA4ZLGP9ayKWG1Me88sO8ZE3RFrOOiPn2uiyC9ysE1fSKMx8B09R05PLa8VXmjlWIeRn6e8g_cc0tyVrwnbwUtcZKtYQpp0493sKNtXnL5K0r3eFZd7R80aC8ARHCDU3epcKIeW8LLZWsUnj6-UXuQaI-bqqTommK0vP5ejf0_xth2gD8oyyD0P7kVpDo-6wZ64jIyC3suEXLykSU7ip7fyidOIWnM9MjpJQkH1NT37tPdQik');
+                "
+              ></div>
+              <div class="flex flex-col">
+                <h1 class="text-white text-base font-medium leading-normal">
+                  Geo-WAQF
+                </h1>
+                <p
+                  class="text-gray-400 dark:text-[#92a4c9] text-sm font-normal leading-normal"
+                >
+                  Peatland Restoration
+                </p>
+              </div>
+            </div>
+            <nav class="flex flex-col gap-2 mt-4">
+              <a
+                class="flex items-center gap-3 px-3 py-2 text-gray-400 dark:text-white/70 hover:bg-[#232f48]/50 hover:text-white rounded-lg"
+                href="#"
+              >
+                <span class="material-symbols-outlined">dashboard</span>
+                <p class="text-sm font-medium leading-normal">Dashboard</p>
+              </a>
+              <a
+                class="flex items-center gap-3 px-3 py-2 text-gray-400 dark:text-white/70 hover:bg-[#232f48]/50 hover:text-white rounded-lg"
+                href="#"
+              >
+                <span class="material-symbols-outlined">folder</span>
+                <p class="text-sm font-medium leading-normal">Projects</p>
+              </a>
+              <a
+                class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#232f48] text-white"
+                href="#"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: 'FILL' 1"
+                  >task_alt</span
+                >
+                <p class="text-sm font-medium leading-normal">
+                  Carbon Validation
+                </p>
+              </a>
+              <a
+                class="flex items-center gap-3 px-3 py-2 text-gray-400 dark:text-white/70 hover:bg-[#232f48]/50 hover:text-white rounded-lg"
+                href="#"
+              >
+                <span class="material-symbols-outlined">payments</span>
+                <p class="text-sm font-medium leading-normal">Financials</p>
+              </a>
+              <a
+                class="flex items-center gap-3 px-3 py-2 text-gray-400 dark:text-white/70 hover:bg-[#232f48]/50 hover:text-white rounded-lg"
+                href="#"
+              >
+                <span class="material-symbols-outlined">bar_chart</span>
+                <p class="text-sm font-medium leading-normal">Reports</p>
+              </a>
+            </nav>
+          </div>
+          <div class="flex flex-col gap-1">
+            <a
+              class="flex items-center gap-3 px-3 py-2 text-gray-400 dark:text-white/70 hover:bg-[#232f48]/50 hover:text-white rounded-lg"
+              href="#"
+            >
+              <span class="material-symbols-outlined">settings</span>
+              <p class="text-sm font-medium leading-normal">Settings</p>
+            </a>
+            <a
+              class="flex items-center gap-3 px-3 py-2 text-gray-400 dark:text-white/70 hover:bg-[#232f48]/50 hover:text-white rounded-lg"
+              href="#"
+            >
+              <span class="material-symbols-outlined">help</span>
+              <p class="text-sm font-medium leading-normal">Help</p>
+            </a>
+          </div>
+        </div>
+      </aside>
+      <!-- Main Content -->
+      <main class="flex-1 p-8">
+        <div class="w-full max-w-7xl mx-auto">
+          <!-- Breadcrumbs -->
+          <div class="flex flex-wrap gap-2">
+            <a
+              class="text-gray-400 dark:text-[#92a4c9] text-sm font-medium leading-normal"
+              href="#"
+              >Geo-WAQF</a
+            >
+            <span
+              class="text-gray-400 dark:text-[#92a4c9] text-sm font-medium leading-normal"
+              >/</span
+            >
+            <a
+              class="text-gray-400 dark:text-[#92a4c9] text-sm font-medium leading-normal"
+              href="#"
+              >Dashboard</a
+            >
+            <span
+              class="text-gray-400 dark:text-[#92a4c9] text-sm font-medium leading-normal"
+              >/</span
+            >
+            <span
+              class="text-gray-200 dark:text-white text-sm font-medium leading-normal"
+              >Carbon Validation</span
+            >
+          </div>
+          <!-- PageHeading -->
+          <div class="flex flex-wrap justify-between gap-3 mt-4">
+            <div class="flex min-w-72 flex-col gap-2">
+              <h1
+                class="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]"
+              >
+                Pilar 3: Validasi &amp; Analitik Karbon
+              </h1>
+              <p
+                class="text-gray-500 dark:text-[#92a4c9] text-base font-normal leading-normal"
+              >
+                Monitor and validate carbon stock based on our predictive model.
+              </p>
+            </div>
+          </div>
+          <!-- Filters -->
+          <div class="flex gap-3 pt-6 overflow-x-auto">
+            <button
+              class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 dark:bg-[#232f48] pl-4 pr-2 hover:bg-white/20 dark:hover:bg-primary/30 transition-colors"
+            >
+              <p
+                class="text-gray-200 dark:text-white text-sm font-medium leading-normal"
+              >
+                Project Region: All
+              </p>
+              <span
+                class="material-symbols-outlined text-gray-200 dark:text-white"
+                >expand_more</span
+              >
+            </button>
+            <button
+              class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 dark:bg-[#232f48] pl-4 pr-2 hover:bg-white/20 dark:hover:bg-primary/30 transition-colors"
+            >
+              <p
+                class="text-gray-200 dark:text-white text-sm font-medium leading-normal"
+              >
+                Year: 2024
+              </p>
+              <span
+                class="material-symbols-outlined text-gray-200 dark:text-white"
+                >expand_more</span
+              >
+            </button>
+            <button
+              class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 dark:bg-[#232f48] pl-4 pr-2 hover:bg-white/20 dark:hover:bg-primary/30 transition-colors"
+            >
+              <p
+                class="text-gray-200 dark:text-white text-sm font-medium leading-normal"
+              >
+                Land Type: All
+              </p>
+              <span
+                class="material-symbols-outlined text-gray-200 dark:text-white"
+                >expand_more</span
+              >
+            </button>
+          </div>
+          <!-- Main Dashboard Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            <!-- Map Section -->
+            <div class="lg:col-span-2">
+              <div
+                class="bg-white/5 dark:bg-[#101622] rounded-xl p-6 border border-white/10 dark:border-[#324467] h-full"
+              >
+                <h2
+                  class="text-gray-200 dark:text-white text-lg font-semibold mb-4"
+                >
+                  Carbon Stock Distribution Map (Predictive Model)
+                </h2>
+                <div
+                  class="relative aspect-[16/10] bg-[#0A1931] rounded-lg overflow-hidden"
+                >
+                  <img
+                    alt="Geospatial map showing carbon stock distribution with color gradients from light green to dark blue"
+                    class="w-full h-full object-cover opacity-20"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk4IZbi0KOi7LcUjlb5GmGHPfh95dBgVywSBCcNnNTl9HkrZT0_sktWpGYZ92UOzRWiRi5hJFqMXcOZe2PzlaMHLnKCc2XgoMAHY58Ak3rCLvh55IKNbH96t8Y-tSzIVrpfA8QVqDneibOh07t5A_eexBN7Ah0TorCIh48Ifhcow7s0vajWMhQKvTQ6vV8QLYfHztiTJJ000LOwc3ta03b8WmCDafOSNJP659VjNNuW_9BqchEJQmQ4e_ZE4rwymTQ74yOudLT9q4"
+                  />
+                  <div
+                    class="absolute inset-0 flex items-center justify-center"
+                  >
+                    <p class="text-gray-400 dark:text-[#92a4c9]">
+                      Interactive Map Loading...
+                    </p>
+                  </div>
+                  <div
+                    class="absolute bottom-4 left-4 bg-[#0A1931]/80 backdrop-blur-sm p-3 rounded-lg border border-white/10 dark:border-[#324467]"
+                  >
+                    <p
+                      class="text-gray-200 dark:text-white text-xs font-bold mb-2"
+                    >
+                      Carbon Stock (ton C/ha)
+                    </p>
+                    <div class="flex items-center gap-2">
+                      <span class="text-gray-400 dark:text-[#92a4c9] text-xs"
+                        >Low</span
+                      >
+                      <div
+                        class="w-24 h-2 rounded-full bg-gradient-to-r from-green-300 via-blue-400 to-blue-800"
+                      ></div>
+                      <span class="text-gray-400 dark:text-[#92a4c9] text-xs"
+                        >High</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Stats Section -->
+            <div class="flex flex-col gap-6">
+              <div
+                class="flex flex-col gap-2 rounded-xl p-6 border border-white/10 dark:border-[#324467] bg-white/5 dark:bg-[#101622]"
+              >
+                <p
+                  class="text-gray-400 dark:text-[#92a4c9] text-base font-medium leading-normal"
+                >
+                  Total Estimated Carbon Stock
+                </p>
+                <p
+                  class="text-gray-200 dark:text-white tracking-light text-3xl font-bold leading-tight"
+                >
+                  1.2M
+                  <span
+                    class="text-xl font-medium text-gray-400 dark:text-[#92a4c9]"
+                    >ton C</span
+                  >
+                </p>
+              </div>
+              <div
+                class="flex flex-col gap-2 rounded-xl p-6 border border-white/10 dark:border-[#324467] bg-white/5 dark:bg-[#101622]"
+              >
+                <p
+                  class="text-gray-400 dark:text-[#92a4c9] text-base font-medium leading-normal"
+                >
+                  Carbon Market Value (Est.)
+                </p>
+                <p
+                  class="text-[#FFC107] tracking-light text-3xl font-bold leading-tight"
+                >
+                  $44.1M
+                  <span
+                    class="text-xl font-medium text-gray-400 dark:text-[#92a4c9]"
+                    >CO₂e</span
+                  >
+                </p>
+              </div>
+              <div
+                class="flex flex-col gap-4 rounded-xl p-6 border border-white/10 dark:border-[#324467] bg-white/5 dark:bg-[#101622]"
+              >
+                <p
+                  class="text-gray-400 dark:text-[#92a4c9] text-base font-medium leading-normal"
+                >
+                  ML Model Confidence Level
+                </p>
+                <div class="flex items-center gap-4">
+                  <div class="relative w-20 h-20">
+                    <svg class="w-full h-full" viewbox="0 0 36 36">
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#324467"
+                        stroke-width="3"
+                      ></path>
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="#FFC107"
+                        stroke-dasharray="92.5, 100"
+                        stroke-linecap="round"
+                        stroke-width="3"
+                      ></path>
+                    </svg>
+                    <div
+                      class="absolute inset-0 flex items-center justify-center"
+                    >
+                      <p
+                        class="text-gray-200 dark:text-white text-xl font-bold"
+                      >
+                        92.5<span class="text-sm">%</span>
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-gray-400 dark:text-[#92a4c9] text-sm flex-1">
+                    High confidence based on Random Forest model validation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Data Table -->
+          <div
+            class="mt-6 bg-white/5 dark:bg-[#101622] rounded-xl border border-white/10 dark:border-[#324467]"
+          >
+            <div class="p-6 flex justify-between items-center">
+              <h3 class="text-lg font-semibold text-gray-200 dark:text-white">
+                Detailed Land Data
+              </h3>
+              <button
+                class="flex items-center gap-2 text-sm text-gray-300 dark:text-gray-300 bg-[#232f48] hover:bg-primary/30 px-4 py-2 rounded-lg transition-colors"
+              >
+                <span class="material-symbols-outlined" style="font-size: 18px"
+                  >download</span
+                >
+                Export Data
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr class="border-b border-white/10 dark:border-[#324467]">
+                    <th
+                      class="p-4 text-sm font-semibold text-gray-400 dark:text-[#92a4c9]"
+                    >
+                      Land ID
+                    </th>
+                    <th
+                      class="p-4 text-sm font-semibold text-gray-400 dark:text-[#92a4c9]"
+                    >
+                      Region
+                    </th>
+                    <th
+                      class="p-4 text-sm font-semibold text-gray-400 dark:text-[#92a4c9]"
+                    >
+                      Carbon Stock (ton C)
+                    </th>
+                    <th
+                      class="p-4 text-sm font-semibold text-gray-400 dark:text-[#92a4c9]"
+                    >
+                      Coordinates
+                    </th>
+                    <th
+                      class="p-4 text-sm font-semibold text-gray-400 dark:text-[#92a4c9]"
+                    >
+                      Last Update
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b border-white/10 dark:border-[#324467] hover:bg-white/5 dark:hover:bg-white/5"
+                  >
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      ID-KAL-001
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      Central Kalimantan
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      45,200
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      -2.31, 115.35
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      2024-05-10
+                    </td>
+                  </tr>
+                  <tr
+                    class="border-b border-white/10 dark:border-[#324467] hover:bg-white/5 dark:hover:bg-white/5"
+                  >
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      ID-SUM-003
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      Riau, Sumatra
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      88,900
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      0.51, 101.45
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      2024-05-09
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-white/5 dark:hover:bg-white/5">
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      ID-PAP-007
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      West Papua
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      120,500
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      -0.86, 134.08
+                    </td>
+                    <td class="p-4 text-sm text-gray-200 dark:text-white">
+                      2024-05-11
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

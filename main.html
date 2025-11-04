@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Geo-WAQF Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#D4AF37" /* Soft Gold for financial/waqf accents */,
+              "background-light":
+                "#f0f2f5" /* Lighter version for light mode */,
+              "background-dark": "#1A2B3C" /* Dark Blue / Charcoal */,
+              "card-light": "#ffffff",
+              "card-dark": "#233547",
+              "border-light": "#e0e0e0",
+              "border-dark": "#314354",
+              "text-light-primary": "#1A2B3C",
+              "text-light-secondary": "#5a6876",
+              "text-dark-primary": "#ffffff",
+              "text-dark-secondary": "#a0b0c0",
+              "earthy-green": "#2E7D32",
+              "priority-high": "#D32F2F",
+              "priority-medium": "#FBC02D",
+              "priority-low": "#388E3C",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              lg: "0.75rem",
+              xl: "1rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-display bg-background-light dark:bg-background-dark">
+    <div class="flex h-screen w-full">
+      <!-- SideNavBar -->
+      <aside
+        class="flex flex-col w-64 bg-card-light dark:bg-card-dark border-r border-border-light dark:border-border-dark"
+      >
+        <div
+          class="flex items-center gap-3 p-6 border-b border-border-light dark:border-border-dark"
+        >
+          <div
+            class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+            data-alt="Geo-WAQF Logo"
+            style="
+              background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdz8zsYnZTs8YZFQ_WXOUyblUiB0SHBgWU1l7HL-3AckjajweszBvCfW08CnVcdsH7fG2D5l-IsWfipcbGcBcpJN-zsGCUTV_B4hc4maFLbL6Svmdkd6oxnzkDlIBpZRN4Nb4SOnmc-C6gp1bkW2urVZntV1QBXC75kEaRBidSZPyVtSEDUgu8b11gADZA87jHEJrT3dFvkILk6pMqLo9NRmWmXPhAvojKryTFZewSVgPrh6d3poXn8CktMzSkHyfRXKjX4VwC3Bk');
+            "
+          ></div>
+          <div class="flex flex-col">
+            <h1
+              class="text-text-light-primary dark:text-text-dark-primary text-lg font-bold leading-normal"
+            >
+              Geo-WAQF
+            </h1>
+            <p class="text-earthy-green text-sm font-medium leading-normal">
+              Restorasi Gambut
+            </p>
+          </div>
+        </div>
+        <nav class="flex flex-col gap-2 p-4">
+          <a
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary"
+            href="#"
+          >
+            <span class="material-symbols-outlined">dashboard</span>
+            <p class="text-sm font-semibold leading-normal">Dasbor</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-light-secondary dark:text-text-dark-secondary hover:bg-black/5 dark:hover:bg-white/5"
+            href="#"
+          >
+            <span class="material-symbols-outlined">bar_chart</span>
+            <p class="text-sm font-medium leading-normal">Laporan</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-light-secondary dark:text-text-dark-secondary hover:bg-black/5 dark:hover:bg-white/5"
+            href="#"
+          >
+            <span class="material-symbols-outlined">map</span>
+            <p class="text-sm font-medium leading-normal">Peta</p>
+          </a>
+          <a
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-light-secondary dark:text-text-dark-secondary hover:bg-black/5 dark:hover:bg-white/5"
+            href="#"
+          >
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-sm font-medium leading-normal">Pengaturan</p>
+          </a>
+        </nav>
+        <div class="mt-auto p-4">
+          <div
+            class="flex flex-col gap-2 p-4 rounded-lg bg-earthy-green/10 text-center"
+          >
+            <h3
+              class="font-bold text-text-light-primary dark:text-text-dark-primary"
+            >
+              Butuh Bantuan?
+            </h3>
+            <p
+              class="text-sm text-text-light-secondary dark:text-text-dark-secondary"
+            >
+              Hubungi tim support kami jika Anda mengalami kendala.
+            </p>
+            <button
+              class="mt-2 w-full flex items-center justify-center gap-2 rounded-lg bg-earthy-green px-4 py-2 text-sm font-semibold text-white"
+            >
+              <span class="material-symbols-outlined text-base"
+                >contact_support</span
+              >
+              Hubungi Support
+            </button>
+          </div>
+        </div>
+      </aside>
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col h-screen overflow-y-auto">
+        <!-- TopNavBar -->
+        <header
+          class="flex items-center justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10 border-b border-border-light dark:border-border-dark px-8 py-4"
+        >
+          <h2
+            class="text-text-light-primary dark:text-text-dark-primary text-xl font-bold leading-tight"
+          >
+            Dasbor Geo-WAQF
+          </h2>
+          <div class="flex items-center gap-4">
+            <button
+              class="text-text-light-secondary dark:text-text-dark-secondary hover:text-primary dark:hover:text-primary"
+            >
+              <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <div class="flex items-center gap-3">
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                data-alt="User profile picture"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUVprDiL1x-lU1_E0VkbkLXkAcMXKIMQ9KWO5wWW7q_EVdGbvM5tdeGvLrq1dzTmp_dHnZMkgDG_EKbJeD50ih-rqh_VKk3HhwSOvY1fKOSnSB2Rt1LbyQCZno4hiMUVk5sB6fnF7FE8hUnwsx1nRG6kT48_eWqL2j5fj6GJ9EwRqC6TpIWfqqzEMNr1esd-7ABL-iiTDdsPDZ-0M52j-XuQEDnh97to7G5pJmfUS5Th4cYWiLGXnI8-WKIsAT6UBRjXKw8XSjumA');
+                "
+              ></div>
+              <div class="text-right hidden sm:block">
+                <p
+                  class="text-sm font-semibold text-text-light-primary dark:text-text-dark-primary"
+                >
+                  Budi Santoso
+                </p>
+                <p
+                  class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                >
+                  Admin
+                </p>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- Page Content -->
+        <div class="p-8 grid grid-cols-12 grid-rows-2 gap-8 flex-1">
+          <!-- Map -->
+          <div
+            class="col-span-12 lg:col-span-8 row-span-2 flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-sm"
+          >
+            <div
+              class="p-4 border-b border-border-light dark:border-border-dark"
+            >
+              <h3
+                class="font-semibold text-text-light-primary dark:text-text-dark-primary"
+              >
+                Peta Area Restorasi Gambut
+              </h3>
+            </div>
+            <div
+              class="flex-1 bg-cover bg-center rounded-b-xl"
+              data-alt="Geospatial map showing peatland restoration areas in various colors"
+              style="
+                background-image: url('https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=YOUR_API_KEY&amp;c=3.4862,101.6264&amp;z=12&amp;w=1200&amp;h=800&amp;nodot&amp;pip');
+                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmNzB8bkQAfssWRORw4yFSLrbC07m7hr4jrclUq9vmGwBIXISHg1DbtzhQ-BMSBzlSsuxzzZUowvCcYng6EkM9fPsfgy_y82AIqLo4WaPPEeJ2rMT-fSkGl3UeWGW-5yCfZD9kpHowlcHTf2b9Qm6jWnhP9dOvtViqX594wW758DFbdDkKmF4ujDdT5N-grmjtVn1ZuB6nBWrAsclk-mHoCA_EVwb8IHggov6DhDWp7Tw2Z1KYVGUNW5dWcbbmfCDHmpSxdzC9BJI');
+              "
+            >
+              <div class="h-full w-full flex flex-col justify-between p-4">
+                <div class="flex justify-end">
+                  <div
+                    class="flex flex-col gap-2 bg-card-light dark:bg-card-dark p-2 rounded-lg shadow-lg"
+                  >
+                    <div class="flex items-center gap-2">
+                      <div class="w-4 h-4 rounded-full bg-priority-high"></div>
+                      <span
+                        class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                        >Zona Merah</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-4 h-4 rounded-full bg-priority-medium"
+                      ></div>
+                      <span
+                        class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                        >Zona Kuning</span
+                      >
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="w-4 h-4 rounded-full bg-priority-low"></div>
+                      <span
+                        class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                        >Zona Hijau</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flex justify-end">
+                  <div class="flex flex-col gap-1">
+                    <button
+                      class="flex size-10 items-center justify-center rounded-t-lg bg-card-light dark:bg-card-dark text-text-light-primary dark:text-text-dark-primary shadow-md"
+                    >
+                      <span class="material-symbols-outlined">add</span>
+                    </button>
+                    <button
+                      class="flex size-10 items-center justify-center rounded-b-lg bg-card-light dark:bg-card-dark text-text-light-primary dark:text-text-dark-primary shadow-md"
+                    >
+                      <span class="material-symbols-outlined">remove</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Priority Planning Widget -->
+          <div
+            class="col-span-12 md:col-span-6 lg:col-span-4 row-span-1 flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-sm p-6"
+          >
+            <h3
+              class="text-base font-semibold text-text-light-primary dark:text-text-dark-primary mb-4"
+            >
+              Prioritas Perencanaan
+            </h3>
+            <div class="flex items-center gap-4 mb-4">
+              <div class="relative w-24 h-24">
+                <svg class="w-full h-full" viewbox="0 0 36 36">
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none"
+                    stroke="#388E3C"
+                    stroke-width="3"
+                  ></path>
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831"
+                    fill="none"
+                    stroke="#FBC02D"
+                    stroke-dasharray="60, 100"
+                    stroke-width="3"
+                  ></path>
+                  <path
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831"
+                    fill="none"
+                    stroke="#D32F2F"
+                    stroke-dasharray="25, 100"
+                    stroke-width="3"
+                  ></path>
+                </svg>
+                <div
+                  class="absolute inset-0 flex items-center justify-center flex-col"
+                >
+                  <span
+                    class="text-lg font-bold text-text-light-primary dark:text-text-dark-primary"
+                    >5</span
+                  >
+                  <span
+                    class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                    >Desa</span
+                  >
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-priority-high"></span>
+                  <p
+                    class="text-text-light-secondary dark:text-text-dark-secondary"
+                  >
+                    25% Zona Merah
+                  </p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-priority-medium"></span>
+                  <p
+                    class="text-text-light-secondary dark:text-text-dark-secondary"
+                  >
+                    35% Zona Kuning
+                  </p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-priority-low"></span>
+                  <p
+                    class="text-text-light-secondary dark:text-text-dark-secondary"
+                  >
+                    40% Zona Hijau
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-3">
+              <div
+                class="flex items-center justify-between text-sm hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-md cursor-pointer"
+              >
+                <p
+                  class="font-medium text-text-light-primary dark:text-text-dark-primary"
+                >
+                  Desa Sungai Lestari
+                </p>
+                <span
+                  class="px-2 py-0.5 text-xs rounded-full bg-priority-high/20 text-priority-high"
+                  >Tinggi</span
+                >
+              </div>
+              <div
+                class="flex items-center justify-between text-sm hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-md cursor-pointer"
+              >
+                <p
+                  class="font-medium text-text-light-primary dark:text-text-dark-primary"
+                >
+                  Desa Gambut Jaya
+                </p>
+                <span
+                  class="px-2 py-0.5 text-xs rounded-full bg-priority-high/20 text-priority-high"
+                  >Tinggi</span
+                >
+              </div>
+              <div
+                class="flex items-center justify-between text-sm hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-md cursor-pointer"
+              >
+                <p
+                  class="font-medium text-text-light-primary dark:text-text-dark-primary"
+                >
+                  Kampung Rawa Indah
+                </p>
+                <span
+                  class="px-2 py-0.5 text-xs rounded-full bg-priority-medium/20 text-priority-medium"
+                  >Sedang</span
+                >
+              </div>
+              <div
+                class="flex items-center justify-between text-sm hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-md cursor-pointer"
+              >
+                <p
+                  class="font-medium text-text-light-primary dark:text-text-dark-primary"
+                >
+                  Mekar Sari Village
+                </p>
+                <span
+                  class="px-2 py-0.5 text-xs rounded-full bg-priority-medium/20 text-priority-medium"
+                  >Sedang</span
+                >
+              </div>
+              <div
+                class="flex items-center justify-between text-sm hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-md cursor-pointer"
+              >
+                <p
+                  class="font-medium text-text-light-primary dark:text-text-dark-primary"
+                >
+                  Bakti Mulya Hamlet
+                </p>
+                <span
+                  class="px-2 py-0.5 text-xs rounded-full bg-priority-low/20 text-priority-low"
+                  >Rendah</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Carbon & Monitoring Widgets -->
+          <div
+            class="col-span-12 md:col-span-6 lg:col-span-4 row-span-1 flex flex-col gap-8"
+          >
+            <!-- Carbon Stock Widget -->
+            <div
+              class="flex-1 flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-sm p-6"
+            >
+              <h3
+                class="text-base font-semibold text-text-light-primary dark:text-text-dark-primary mb-2"
+              >
+                Estimasi Stok Karbon
+              </h3>
+              <p
+                class="text-4xl font-bold text-text-light-primary dark:text-text-dark-primary tracking-tight"
+              >
+                1,250,450
+                <span
+                  class="text-2xl font-semibold text-text-light-secondary dark:text-text-dark-secondary"
+                  >tCO₂e</span
+                >
+              </p>
+              <p class="mt-1 text-lg font-semibold text-primary">
+                ~ $ 18,756,750
+              </p>
+            </div>
+            <!-- Monitoring Trends Widget -->
+            <div
+              class="flex-1 flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-sm p-6"
+            >
+              <h3
+                class="text-base font-semibold text-text-light-primary dark:text-text-dark-primary mb-4"
+              >
+                Tren Monitoring (6 Bulan)
+              </h3>
+              <div class="flex flex-col gap-4 flex-1 justify-around">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p
+                      class="text-sm font-medium text-text-light-primary dark:text-text-dark-primary"
+                    >
+                      NDVI (Kehijauan)
+                    </p>
+                    <p
+                      class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                    >
+                      Indeks Vegetasi
+                    </p>
+                  </div>
+                  <svg
+                    height="30"
+                    viewbox="0 0 100 30"
+                    width="100"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <polyline
+                      fill="none"
+                      points="0,20 20,10 40,15 60,5 80,12 100,8"
+                      stroke="#2E7D32"
+                      stroke-width="2"
+                    ></polyline>
+                  </svg>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p
+                      class="text-sm font-medium text-text-light-primary dark:text-text-dark-primary"
+                    >
+                      NDWI (Kebasahan)
+                    </p>
+                    <p
+                      class="text-xs text-text-light-secondary dark:text-text-dark-secondary"
+                    >
+                      Indeks Air
+                    </p>
+                  </div>
+                  <svg
+                    height="30"
+                    viewbox="0 0 100 30"
+                    width="100"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <polyline
+                      fill="none"
+                      points="0,10 20,15 40,12 60,22 80,18 100,25"
+                      stroke="#1E88E5"
+                      stroke-width="2"
+                    ></polyline>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
