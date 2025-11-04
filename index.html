@@ -1,27 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="id" class="dark"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPA Prototype</title>
+    <title>Geo-WAQF Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
     <link rel="stylesheet" href="style.css">
+    
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#11d411", // Aksen hijau terang (dari Pilar 1)
+              "background-light": "#f6f8f6",
+              "background-dark": "#102210", // Latar belakang utama (dari Pilar 1)
+              "card-dark": "#162b16", // Latar belakang kartu (dari Pilar 1)
+              "text-primary": "#ffffff",
+              "text-secondary": "#92c992" // Teks sekunder (dari Pilar 1)
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
 </head>
-<body>
+<body class="bg-background-dark text-text-primary font-display">
     <div class="container">
+        
         <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://via.placeholder.com/40" alt="Geo-WAQF Logo" class="logo">
+                <div class="logo-text">
+                    <h1>Geo-WAQF</h1>
+                    <p>Geospatial-Fintech</p>
+                </div>
+            </div>
+            
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="#" data-page="page_home.html" class="active">Dashboard</a></li>
-                    <li><a href="#" data-page="page_pilar1.html">Pilar 1: Perencanaan</a></li>
-                    <li><a href="#" data-page="page_pilar2.html">Pilar 2: Monitoring</a></li>
-                    <li><a href="#" data-page="page_pilar3.html">Pilar 3: Validasi Karbon</a></li>
+                    <li><a href="#" data-page="page_home.html" class="active">
+                        <span class="material-symbols-outlined">dashboard</span> Dashboard
+                    </a></li>
+                    <li><a href="#" data-page="page_pilar1.html">
+                        <span class="material-symbols-outlined">map</span> Pilar 1: Perencanaan
+                    </a></li>
+                    <li><a href="#" data-page="page_pilar2.html">
+                        <span class="material-symbols-outlined">monitoring</span> Pilar 2: Monitoring
+                    </a></li>
+                    <li><a href="#" data-page="page_pilar3.html">
+                        <span class="material-symbols-outlined">task_alt</span> Pilar 3: Validasi Karbon
+                    </a></li>
                 </ul>
             </nav>
         </aside>
+
         <main id="content-area">
-            <!-- Content will be loaded here -->
-        </main>
+            </main>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,21 +1,75 @@
-body {
-    font-family: sans-serif;
-    margin: 0;
-    background-color: #f0f2f5;
-    color: #333;
+/* Import Font (jika belum ada di Tailwind) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+
+:root {
+    --bg-dark: #102210;         /* Latar belakang utama (dari Pilar 1) */
+    --bg-card: #162b16;         /* Latar belakang sidebar/kartu (dari Pilar 1) */
+    --text-primary: #ffffff;
+    --text-secondary: #92c992;  /* Teks abu-abu/sekunder (dari Pilar 1) */
+    --accent: #11d411;          /* Aksen hijau terang (dari Pilar 1) */
+    --border-color: #234823;    /* Border/garis pemisah */
 }
 
+/* Reset dasar */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden; /* Mencegah scroll horizontal */
+}
+
+/* Struktur utama */
 .container {
     display: flex;
     min-height: 100vh;
 }
 
 .sidebar {
-    width: 250px;
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    width: 280px; /* Sedikit lebih lebar */
+    background-color: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    box-sizing: border-box; /* Memastikan padding tidak menambah lebar */
+    flex-shrink: 0; /* Mencegah sidebar menyusut */
+}
+
+/* Header Sidebar */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header .logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    background-color: var(--text-secondary);
+}
+
+.sidebar-header .logo-text h1 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.sidebar-header .logo-text p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Navigasi Sidebar */
+.sidebar-nav {
+    flex-grow: 1; /* Mendorong footer ke bawah */
+    margin-top: 1.5rem;
 }
 
 .sidebar-nav ul {
@@ -25,25 +79,68 @@ body {
 }
 
 .sidebar-nav a {
-    display: block;
-    padding: 10px 15px;
-    color: #ecf0f1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem; /* Padding lebih nyaman */
+    color: var(--text-secondary); /* Warna default */
     text-decoration: none;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    transition: background-color 0.3s;
+    border-radius: 0.5rem; /* Sesuai radius di Tailwind */
+    margin-bottom: 0.5rem;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.sidebar-nav a .material-symbols-outlined {
+    font-size: 22px;
 }
 
 .sidebar-nav a:hover {
-    background-color: #34495e;
+    background-color: rgba(255, 255, 255, 0.05); /* Hover halus */
+    color: var(--text-primary);
 }
 
 .sidebar-nav a.active {
-    background-color: #1abc9c;
-    color: #fff;
+    background-color: var(--accent); /* Warna aksen */
+    color: var(--bg-dark); /* Teks gelap di atas aksen terang */
+    font-weight: 700;
 }
 
+/* Footer Sidebar */
+.sidebar-footer {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-footer a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+/* Area Konten Utama */
 #content-area {
-    flex-grow: 1;
-    padding: 20px;
+    flex-grow: 1; /* Mengisi sisa ruang */
+    /* PENTING: Kita TIDAK perlu padding di sini.
+      Konten yang dimuat dari (page_pilar1.html, dll)
+      sudah memiliki padding-nya sendiri (misalnya, 'p-6' atau 'p-8' dari Tailwind).
+      Ini mencegah padding ganda.
+    */
+    overflow-y: auto; /* Memungkinkan konten di-scroll */
+    height: 100vh; /* Mengisi tinggi layar */
 }
