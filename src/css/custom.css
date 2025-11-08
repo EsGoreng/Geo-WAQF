@@ -1,9 +1,4 @@
-/*
- * Impor font sudah ada di <head> index.html,
- * jadi kita tidak perlu mengimpornya lagi di sini.
- */
 
-/* Pengaturan dasar untuk material symbols */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

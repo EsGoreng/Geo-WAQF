@@ -1,0 +1,49 @@
+<div class="bg-card-dark rounded-xl shadow-lg border border-border-color overflow-hidden">
+  
+  <div class="p-4 md:p-6 border-b border-border-color">
+    <h3 class="font-semibold text-white text-lg">{{MAP_TITLE}}</h3>
+  </div>
+
+  {{IF_SHOW_SEARCH}}
+  <div class="p-4 md:p-6 border-b border-border-color bg-background-dark">
+    <label class="flex flex-col min-w-40 h-12 w-full max-w-sm">
+      <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+        <div class="text-text-secondary flex border-none bg-card-dark items-center justify-center pl-4 rounded-l-lg border-r-0">
+          <span class="material-symbols-outlined">search</span>
+        </div>
+        <input
+          class="form-input flex w-full min-w-0 flex-1 ... "
+          placeholder="Cari Lokasi"
+          value=""
+        />
+      </div>
+    </label>
+  </div>
+  {{END_IF_SHOW_SEARCH}}
+
+  <div class="relative bg-background-dark aspect-video md:aspect-auto md:h-[500px]">
+    <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-background-dark to-card-dark">
+      <div class="text-center">
+        <span class="material-symbols-outlined text-text-secondary text-6xl mb-4">map</span>
+        <p class="text-text-secondary">Interactive Map Area</p>
+      </div>
+    </div>
+    
+    <div data-component-src="{{LEGEND_SRC}}">
+      </div>
+
+    <div class="absolute bottom-4 right-4 flex flex-col items-end gap-3 z-10">
+      
+      {{IF_SHOW_ZOOM}}
+      <div data-component-src="src/components/ui/map_zoom_controls.html">
+        </div>
+      {{END_IF_SHOW_ZOOM}}
+
+      {{IF_SHOW_NAV}}
+      <div data-component-src="src/components/ui/map_nav_control.html">
+        </div>
+      {{END_IF_SHOW_NAV}}
+
+    </div>
+  </div>
+</div>

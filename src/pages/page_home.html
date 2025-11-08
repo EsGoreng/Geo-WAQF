@@ -1,171 +1,24 @@
 <main>
   <div class="p-4 md:p-6 lg:p-8 flex-1">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-      <div class="bg-card-dark rounded-xl shadow-lg p-6 border border-border-color hover:border-primary transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <div class="bg-primary/20 p-3 rounded-lg">
-            <span class="material-symbols-outlined text-primary text-3xl">terrain</span>
-          </div>
-        </div>
-        <p class="text-text-secondary text-sm mb-2">Total Area Restorasi</p>
-        <p class="text-white text-3xl font-bold">12,450 <span class="text-lg text-text-secondary">ha</span></p>
-      </div>
 
-      <div class="bg-card-dark rounded-xl shadow-lg p-6 border border-border-color hover:border-primary transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <div class="bg-primary/20 p-3 rounded-lg">
-            <span class="material-symbols-outlined text-primary text-3xl">eco</span>
-          </div>
-        </div>
-        <p class="text-text-secondary text-sm mb-2">Estimasi Stok Karbon</p>
-        <p class="text-white text-3xl font-bold">1.25M <span class="text-lg text-text-secondary">tCO₂e</span></p>
+    <div data-component-src="src/components/home_stat_cards.html">
       </div>
-
-      <div class="bg-card-dark rounded-xl shadow-lg p-6 border border-border-color hover:border-primary transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <div class="bg-primary/20 p-3 rounded-lg">
-            <span class="material-symbols-outlined text-primary text-3xl">payments</span>
-          </div>
-        </div>
-        <p class="text-text-secondary text-sm mb-2">Nilai Pasar Karbon</p>
-        <p class="text-white text-3xl font-bold">$18.7M</p>
-      </div>
-
-      <div class="bg-card-dark rounded-xl shadow-lg p-6 border border-border-color hover:border-primary transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <div class="bg-primary/20 p-3 rounded-lg">
-            <span class="material-symbols-outlined text-primary text-3xl">groups</span>
-          </div>
-        </div>
-        <p class="text-text-secondary text-sm mb-2">Desa Terlibat</p>
-        <p class="text-white text-3xl font-bold">24 <span class="text-lg text-text-secondary">desa</span></p>
-      </div>
-    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-      <div class="lg:col-span-8 bg-card-dark rounded-xl shadow-lg border border-border-color overflow-hidden">
-        <div class="p-4 md:p-6 border-b border-border-color">
-          <h3 class="font-semibold text-white text-lg">Peta Area Restorasi Gambut</h3>
-        </div>
-        <div class="relative bg-background-dark aspect-video md:aspect-auto md:h-[500px]">
-          <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-background-dark to-card-dark">
-            <div class="text-center">
-              <span class="material-symbols-outlined text-text-secondary text-6xl mb-4">map</span>
-              <p class="text-text-secondary">Interactive Map Area</p>
-            </div>
-          </div>
-          
-          <div class="absolute top-4 right-4 bg-card-dark/95 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-border-color z-10">
-            <p class="text-white font-semibold text-sm mb-3">Legenda</p>
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full bg-[#D32F2F]"></div>
-                <span class="text-xs text-text-secondary">Zona Merah</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full bg-[#FBC02D]"></div>
-                <span class="text-xs text-text-secondary">Zona Kuning</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full bg-[#388E3C]"></div>
-                <span class="text-xs text-text-secondary">Zona Hijau</span>
-              </div>
-            </div>
-          </div>
 
-          <div class="absolute bottom-4 right-4 flex flex-col gap-1 z-10">
-            <button class="flex w-10 h-10 items-center justify-center rounded-t-lg bg-card-dark text-white shadow-lg hover:bg-border-color transition-colors">
-              <span class="material-symbols-outlined">add</span>
-            </button>
-            <button class="flex w-10 h-10 items-center justify-center rounded-b-lg bg-card-dark text-white shadow-lg hover:bg-border-color transition-colors">
-              <span class="material-symbols-outlined">remove</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <div data-component-src="src/components/shared/map_container.html" 
+               data-map-title="Peta Area Restorasi Gambut"
+               data-legend-src="src/components/legends/legend_priority_zones.html"
+               data-show-zoom="true"
+               class="lg:col-span-8">
+            </div>
 
-      <div class="lg:col-span-4 flex flex-col gap-6">
-        <div class="bg-card-dark rounded-xl shadow-lg p-6 border border-border-color">
-          <h3 class="text-base font-semibold text-white mb-4">
-            Prioritas Perencanaan
-          </h3>
-          
-          <div class="flex items-center gap-4 mb-6">
-            <div class="relative w-24 h-24 flex-shrink-0">
-              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#234823" stroke-width="3"></circle>
-                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#D32F2F" stroke-width="3" stroke-dasharray="25, 100" stroke-linecap="round"></circle>
-                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#FBC02D" stroke-width="3" stroke-dasharray="35, 100" stroke-dashoffset="-25" stroke-linecap="round"></circle>
-                <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#388E3C" stroke-width="3" stroke-dasharray="40, 100" stroke-dashoffset="-60" stroke-linecap="round"></circle>
-              </svg>
-              <div class="absolute inset-0 flex items-center justify-center flex-col">
-                <span class="text-lg font-bold text-white">5</span>
-                <span class="text-xs text-text-secondary">Desa</span>
-              </div>
-            </div>
-            
-            <div class="flex flex-col gap-2 text-sm">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-[#D32F2F]"></span>
-                <p class="text-text-secondary">25% Zona Merah</p>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-[#FBC02D]"></span>
-                <p class="text-text-secondary">35% Zona Kuning</p>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-[#388E3C]"></span>
-                <p class="text-text-secondary">40% Zona Hijau</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center justify-between text-sm hover:bg-white/5 p-3 rounded-lg cursor-pointer transition-colors">
-              <p class="font-medium text-white">Desa Sungai Lestari</p>
-              <span class="px-2 py-1 text-xs rounded-full bg-[#D32F2F]/20 text-[#D32F2F] font-semibold">Tinggi</span>
-            </div>
-            <div class="flex items-center justify-between text-sm hover:bg-white/5 p-3 rounded-lg cursor-pointer transition-colors">
-              <p class="font-medium text-white">Desa Gambut Jaya</p>
-              <span class="px-2 py-1 text-xs rounded-full bg-[#D32F2F]/20 text-[#D32F2F] font-semibold">Tinggi</span>
-            </div>
-            <div class="flex items-center justify-between text-sm hover:bg-white/5 p-3 rounded-lg cursor-pointer transition-colors">
-              <p class="font-medium text-white">Kampung Rawa Indah</p>
-              <span class="px-2 py-1 text-xs rounded-full bg-[#FBC02D]/20 text-[#FBC02D] font-semibold">Sedang</span>
-            </div>
-          </div>
+      <div data-component-src="src/components/home_widgets.html" class="lg:col-span-4 ...">
         </div>
 
-        <div class="bg-card-dark rounded-xl shadow-lg p-6 border border-border-color">
-          <h3 class="text-base font-semibold text-white mb-4">
-            Tren Monitoring (6 Bulan)
-          </h3>
-          
-          <div class="flex flex-col gap-6">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-white">NDVI (Kehijauan)</p>
-                <p class="text-xs text-text-secondary">Indeks Vegetasi</p>
-              </div>
-              <svg height="40" viewBox="0 0 100 40" width="120" xmlns="http://www.w3.org/2000/svg">
-                <polyline fill="none" points="0,30 20,25 40,28 60,18 80,15 100,12" stroke="#2E7D32" stroke-width="2.5"></polyline>
-                <circle cx="100" cy="12" r="3" fill="#2E7D32"></circle>
-              </svg>
-            </div>
-            
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-white">NDWI (Kebasahan)</p>
-                <p class="text-xs text-text-secondary">Indeks Air</p>
-              </div>
-              <svg height="40" viewBox="0 0 100 40" width="120" xmlns="http://www.w3.org/2000/svg">
-                <polyline fill="none" points="0,15 20,18 40,16 60,22 80,20 100,25" stroke="#1E88E5" stroke-width="2.5"></polyline>
-                <circle cx="100" cy="25" r="3" fill="#1E88E5"></circle>
-              </svg>
-            </div>
-          </div>
+      <div data-component-src="src/components/home_tren.html" class="lg:col-span-4 ...">
         </div>
-      </div>
+
     </div>
   </div>
 </main>

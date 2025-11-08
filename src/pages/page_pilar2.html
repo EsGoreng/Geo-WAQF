@@ -7,75 +7,19 @@
         </p>
       </div>
     </div>
+    
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="bg-card-dark rounded-xl p-4 flex flex-col border border-border-color">
-        <div
-          class="w-full h-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
-          data-alt="Peta geospasial Riau menunjukkan beberapa area restorasi gambut"
-          data-location="Riau, Indonesia"
-          style="
-            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjbvwMdMHozg8668ei1sg--Vyqw3qmo_Ed0qjE3rjvSJLe_VmB7SbvWLtcjvcgAKs3WAsatwmBvCj2ykBWaMhLTD3tCN-Xl5YIHm3A6dz6m3bjmo4CowkmxzD-eIQvVC5mmUE8GdkMECfCQcGa0QspnJskObAIT0zpxrXw5CO-QNvimetrSYBWkFdB_FEjwU74aTfELdLw079n1PL8CS2JxJrQ4y5agMdnmo9MU2WZxfnZJLKhKcwpZr6tWh2ktu1g9mOS6lhiQTI');
-          "
-        ></div>
+      
+      <div data-component-src="src/components/shared/map_container.html"
+         data-map-title="Peta Monitoring"
+         data-show-search="false"
+         data-show-zoom="false"
+         data-show-nav="false">
       </div>
-      <div class="flex flex-col gap-6">
-        <div class="bg-card-dark rounded-xl p-6 flex flex-col gap-4 border border-border-color">
-          <div class="flex justify-between items-center">
-            <h2
-              class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]"
-            >
-              Analisis Tren: Blok Restorasi Riau-01
-            </h2>
-            <button
-              class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-border-color pl-4 pr-2 hover:bg-primary/20"
-            >
-              <p class="text-white text-sm font-medium leading-normal">
-                12 Bulan Terakhir
-              </p>
-              <span
-                class="material-symbols-outlined text-white text-[20px]"
-                >expand_more</span
-              >
-            </button>
-          </div>
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-              <h3 class="text-base font-semibold text-white">
-                Indeks Kehijauan (NDVI)
-              </h3>
-              <div class="flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full bg-primary"></div>
-                <span class="text-sm text-gray-400">Tren NDVI</span>
-              </div>
-            </div>
-            <div
-              class="bg-center bg-no-repeat aspect-[16/7] bg-contain rounded-lg"
-              data-alt="Grafik garis menunjukkan tren NDVI positif ke atas selama 12 bulan"
-              style="
-                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSsuKKqGwTjF7svjWqM9HxYmsLvDxhXaxMmFvnieyBFcFxRsxfnrSBmDdX0YivDsE1fmDZR7ZH8aYrzI8By0G2oQsZgbnZJsVUcDAJIA-pkVFIQxYGHcatN-fhrAn8RZSFUFmOjS8-G-RSHmKhpPOdRrSITC1RJqsu5LelGHxBfkPZAuz2w5NIlKulldj56_UMRGMoI7-_L2U0kLJ1wgnMIshCf_f7tdNktWe1zez0l-YvePONXjLAWOnetej8wNiSlFsISJCv01M');
-              "
-            ></div>
-          </div>
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-              <h3 class="text-base font-semibold text-white">
-                Indeks Kebasahan (NDWI)
-              </h3>
-              <div class="flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full bg-[#3b82f6]"></div>
-                <span class="text-sm text-gray-400">Tren NDWI</span>
-              </div>
-            </div>
-            <div
-              class="bg-center bg-no-repeat aspect-[16/7] bg-contain rounded-lg"
-              data-alt="Grafik garis menunjukkan tren NDWI positif ke atas selama 12 bulan"
-              style="
-                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCceVFgh48UV95_eMwZrRs0hlKVbXddSwadMgjGO8yCg6uLKyLHuPxnFp0bo-glovD1a9Iq9krdzmg0Ja7YPfdc9NmMWpH6dPSPFCkHTmFrjFLvzgpDyhibk3MwRP-L4S6qr93jJ5uoZn25sw9q6ilP-1el-sJYiUGELMMx8hd2kRPfK5ZO5L5FpGtJzxf4ImeNxXjyqXKa7dxfhWY5oR8bCfLa8kCIY9oBV7Ttkb_V6to-ZZTKIuzjKcyyOVsfykig6IjMZDdffeI');
-              "
-            ></div>
-          </div>
+      
+      <div data-component-src="src/components/pilar2_analysis.html">
         </div>
-      </div>
+
     </div>
   </div>
 </main>
