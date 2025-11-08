@@ -9,16 +9,16 @@ CORS(app)
 try:
     service_account_info = os.getenv("GEE_CREDENTIALS")
     if not service_account_info:
-        raise Exception("GEE_CREDENTIALS tidak ditemukan di environment.")
+        raise Exception("Environment variable GEE_CREDENTIALS tidak ditemukan.")
 
     credentials_dict = json.loads(service_account_info)
     service_account_email = credentials_dict["client_email"]
 
     credentials = ee.ServiceAccountCredentials(service_account_email, key_data=service_account_info)
     ee.Initialize(credentials)
-    print("✅ Earth Engine berhasil diinisialisasi via env var.")
+    print("✅ Earth Engine berhasil diinisialisasi.")
 except Exception as e:
-    print(f"⚠️ Gagal inisialisasi GEE: {e}")
+    print(f"⚠️ Gagal inisialisasi Earth Engine: {e}")
 
 
 # --- Fungsi Helper GEE ---
