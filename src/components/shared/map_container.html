@@ -12,7 +12,7 @@
           <span class="material-symbols-outlined">search</span>
         </div>
         <input
-          class="form-input flex w-full min-w-0 flex-1 ... "
+          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-0 border-none bg-card-dark focus:border-none h-full placeholder:text-text-secondary px-4 text-base font-normal leading-normal"
           placeholder="Cari Lokasi"
           value=""
         />
@@ -22,12 +22,9 @@
   {{END_IF_SHOW_SEARCH}}
 
   <div class="relative bg-background-dark aspect-video md:aspect-auto md:h-[500px]">
-    <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-background-dark to-card-dark">
-      <div class="text-center">
-        <span class="material-symbols-outlined text-text-secondary text-6xl mb-4">map</span>
-        <p class="text-text-secondary">Interactive Map Area</p>
+    
+    <div id="map-canvas" style="height: 100%; width: 100%; background-color: #102210;">
       </div>
-    </div>
     
     <div data-component-src="{{LEGEND_SRC}}">
       </div>
