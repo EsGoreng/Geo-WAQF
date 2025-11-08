@@ -258,7 +258,7 @@ export class SPAController {
         console.log("Menghubungi backend di http://localhost:5000/api/get-ndvi-layer ...");
         
         try {
-            const response = await fetch('http://localhost:5000/api/get-ndvi-layer');
+            const response = await fetch('/api/get-ndvi-layer');
             
             if (!response.ok) {
                 throw new Error(`Gagal mengambil data dari server: ${response.statusText}`);
