@@ -1,146 +1,73 @@
 import ee
-from flask import Flask, jsonify, request # <-- TAMBAHKAN 'request'
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-import json 
+import json
+import os
 
 # --- Inisialisasi Aplikasi ---
-
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
+# --- Inisialisasi Earth Engine dengan aman ---
 try:
-    key_file = 'service-account.json' 
+    key_file = os.path.join(os.path.dirname(__file__), 'service-account.json')
+    if not os.path.exists(key_file):
+        raise FileNotFoundError("File service-account.json tidak ditemukan di server.")
+
     with open(key_file) as f:
         service_account_email = json.load(f)['client_email']
-    credentials = ee.ServiceAccountCredentials(
-        service_account_email, 
-        key_file
-    )
+
+    credentials = ee.ServiceAccountCredentials(service_account_email, key_file)
     ee.Initialize(credentials=credentials)
-    print("Koneksi GEE (via Akun Layanan) berhasil.")
+    print("✅ Koneksi ke Google Earth Engine berhasil.")
 except Exception as e:
-    print(f"Autentikasi GEE gagal: {e}")
-    # ... (kode error) ...
-    exit()
+    print(f"⚠️ Gagal inisialisasi Earth Engine: {e}")
 
 # --- Fungsi Helper GEE ---
-
 def get_ndvi_image(year):
-    # ... (Fungsi ini tidak berubah) ...
     try:
         start_date = f'{year}-01-01'
-        end_date = f'{year}-07-01' # Ambil 6 bulan pertama
+        end_date = f'{year}-07-01'
         collection = ee.ImageCollection('MODIS/061/MOD13A1') \
-                       .filter(ee.Filter.date(start_date, end_date))
+            .filter(ee.Filter.date(start_date, end_date))
         mean_image = collection.mean()
-        if mean_image.bandNames().size().getInfo() == 0:
-             raise Exception(f"Tidak ada citra ditemukan untuk tahun {year}.")
         return mean_image.select('NDVI')
     except Exception as e:
-        print(f"Gagal mendapatkan gambar untuk tahun {year}: {e}")
+        print(f"Gagal mendapatkan gambar {year}: {e}")
         return None
 
-# --- API Endpoints ---
-
-@app.route("/")
+# --- Routes ---
+@app.route('/')
 def hello():
-    return "Halo! Server Geo-WAQF (Flask) sedang berjalan."
+    return jsonify({"message": "Flask + Earth Engine berjalan di Vercel!"})
 
-@app.route("/api/get-ndvi-layer") 
-def get_ndvi_comparison_layer(): 
-    # ... (Endpoint ini tidak berubah) ...
+@app.route('/api/get-ndvi-layer')
+def get_ndvi_layer():
     try:
-        image_2019 = get_ndvi_image(2019)
-        image_2024 = get_ndvi_image(2024)
-        
-        if image_2019 is None or image_2024 is None:
-            raise Exception("Gagal menghitung salah satu atau kedua gambar NDVI.")
+        img_2019 = get_ndvi_image(2019)
+        img_2024 = get_ndvi_image(2024)
+        vis = {'min': 0, 'max': 9000, 'palette': ['#e7eff6', '#00a600']}
 
-        ndvi_vis_params = {
-            'min': 0.0,
-            'max': 9000.0,
-            'palette': ['#e7eff6', '#00a600'] 
-        }
+        if img_2019 is None or img_2024 is None:
+            raise Exception("NDVI image tidak ditemukan")
 
-        map_id_2019 = image_2019.getMapId(ndvi_vis_params)
-        map_id_2024 = image_2024.getMapId(ndvi_vis_params)
-        
-        url_2019 = map_id_2019['tile_fetcher'].url_format
-        url_2024 = map_id_2024['tile_fetcher'].url_format
-
-        return jsonify({
-            'status': 'success',
-            'url_2019': url_2019,
-            'url_2024': url_2024
-        })
-
+        url_2019 = img_2019.getMapId(vis)['tile_fetcher'].url_format
+        url_2024 = img_2024.getMapId(vis)['tile_fetcher'].url_format
+        return jsonify({"status": "success", "url_2019": url_2019, "url_2024": url_2024})
     except Exception as e:
-        print(f"Error di GEE: {e}") 
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
+        return jsonify({"status": "error", "message": str(e)}), 500
 
-
-# =================================
-# ENDPOINT BARU (LANGKAH 7.1)
-# =================================
-@app.route("/api/get-mce-layer")
+@app.route('/api/get-mce-layer')
 def get_mce_layer():
-    """
-    Endpoint API untuk simulasi Analisis Multi-Kriteria (MCE).
-    Menerima 'weight' sebagai parameter query dari front-end.
-    """
     try:
-        # 1. Ambil 'weight' dari parameter URL.
-        #    Front-end akan memanggil: /api/get-mce-layer?degradasi=80
-        #    Kita ambil nilai '80' itu. Jika tidak ada, default-nya 50.
-        weight_str = request.args.get('degradasi', default='50')
-        
-        # Konversi ke angka
-        try:
-            weight = float(weight_str)
-        except ValueError:
-            weight = 50.0 # Default jika inputnya bukan angka
-
-        print(f"Menerima permintaan MCE dengan 'degradasi' = {weight}")
-
-        # 2. SIMULASI MCE:
-        #    Kita gunakan data Ketinggian (Elevation) global sebagai ganti data "Degradasi".
-        #    (Ini hanya untuk membuktikan slider-nya terhubung ke GEE).
+        weight = float(request.args.get('degradasi', 50))
         image = ee.Image('CGIAR/SRTM90_V4').select('elevation')
-
-        # 3. Gunakan 'weight' untuk mengubah visualisasi
-        #    Slider 0 = min 0, Slider 100 = min 100
-        #    Ini akan secara visual mengubah peta saat slider digerakkan.
-        vis_params = {
-            'min': 0.0,       # Tetap 0
-            'max': weight * 10, # Max 1000 (jika slider 100)
-            'palette': ['#000000', '#FFFFFF'] # Hitam ke Putih
-        }
-
-        # 4. Dapatkan URL Peta dari GEE
-        map_id = image.getMapId(vis_params)
-        url = map_id['tile_fetcher'].url_format
-
-        # 5. Kirim URL kembali ke front-end
-        return jsonify({
-            'status': 'success',
-            'url': url
-        })
-
+        vis = {'min': 0, 'max': weight * 10, 'palette': ['#000000', '#FFFFFF']}
+        url = image.getMapId(vis)['tile_fetcher'].url_format
+        return jsonify({"status": "success", "url": url})
     except Exception as e:
-        print(f"Error di GEE (MCE): {e}") 
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
-# =================================
-# AKHIR ENDPOINT BARU
-# =================================
+        return jsonify({"status": "error", "message": str(e)}), 500
 
-
-# --- Menjalankan Server ---
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# ⚠️ Hapus bagian ini agar tidak crash di serverless
+# if __name__ == '__main__':
+#     app.run(debug=True, port=5000)
