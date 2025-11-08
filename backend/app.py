@@ -1,27 +1,25 @@
-import ee
+import json, os, ee
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import json
-import os
 
-# --- Inisialisasi Aplikasi ---
 app = Flask(__name__)
 CORS(app)
 
-# --- Inisialisasi Earth Engine dengan aman ---
+# Inisialisasi Earth Engine via Environment Variable
 try:
-    key_file = os.path.join(os.path.dirname(__file__), 'service-account.json')
-    if not os.path.exists(key_file):
-        raise FileNotFoundError("File service-account.json tidak ditemukan di server.")
+    service_account_info = os.getenv("GEE_CREDENTIALS")
+    if not service_account_info:
+        raise Exception("GEE_CREDENTIALS tidak ditemukan di environment.")
 
-    with open(key_file) as f:
-        service_account_email = json.load(f)['client_email']
+    credentials_dict = json.loads(service_account_info)
+    service_account_email = credentials_dict["client_email"]
 
-    credentials = ee.ServiceAccountCredentials(service_account_email, key_file)
-    ee.Initialize(credentials=credentials)
-    print("✅ Koneksi ke Google Earth Engine berhasil.")
+    credentials = ee.ServiceAccountCredentials(service_account_email, key_data=service_account_info)
+    ee.Initialize(credentials)
+    print("✅ Earth Engine berhasil diinisialisasi via env var.")
 except Exception as e:
-    print(f"⚠️ Gagal inisialisasi Earth Engine: {e}")
+    print(f"⚠️ Gagal inisialisasi GEE: {e}")
+
 
 # --- Fungsi Helper GEE ---
 def get_ndvi_image(year):
