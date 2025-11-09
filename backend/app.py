@@ -34,22 +34,18 @@ except Exception as e:
     AOI_BENGKALIS = None
     AOI_KABUPATEN_RIAU = None
 
-# =================================
-# REFACTOR: FUNGSI HELPER GEE
-# =================================
+# --- Fungsi Helper GEE (Analisis) ---
 
 def maskS2clouds(image):
-    """Cloud masking untuk Sentinel-2 HARMONIZED (menggunakan QA60)"""
     qa = image.select('QA60')
     cloudBitMask = 1 << 10
     cirrusBitMask = 1 << 11
     mask = qa.bitwiseAnd(cloudBitMask).eq(0) \
              .And(qa.bitwiseAnd(cirrusBitMask).eq(0))
     mask = mask.updateMask(mask).focal_min(radius=3, units='pixels')
-    return image.updateMask(mask).divide(10000) # Normalisasi ke 0-1
+    return image.updateMask(mask).divide(10000)
 
 def get_processed_s2_composite(start_date, end_date):
-    """Mendapatkan komposit median Sentinel-2 (Bebas Awan, Terekspos, Dihitung NBR/NDWI)"""
     s2_collection = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED") \
                       .filterDate(start_date, end_date) \
                       .filterBounds(AOI_BENGKALIS) \
@@ -65,57 +61,6 @@ def get_processed_s2_composite(start_date, end_date):
     ndwi_image = median_image.normalizedDifference(['B3', 'B8']).rename('NDWI')
     return nbr_image.addBands(ndwi_image).clip(AOI_BENGKALIS)
 
-# --- Fungsi Helper Kriteria MCE ---
-
-# =================================
-# PERBAIKAN DATASET #1 (Gambut)
-# =================================
-def get_kriteria_gambut():
-    """Kriteria 1: Kedalaman Gambut (Dataset Spesifik Indonesia). Skor 1 = Gambut Sangat Dalam."""
-    # LAMA:
-    # peat_image = ee.Image('projects/sat-io/open-datasets/GLOBAL-PEATLAND-DATABASE').select('b1')
-    # kriteria_gambut = peat_image.gt(0).rename('score_gambut') # Skor 1 jika gambut
-    
-    # BARU (Dataset Kedalaman Gambut Indonesia [cm]):
-    peat_collection = ee.ImageCollection('projects/sat-io/open-datasets/MOHSIN/Monthly_Peat_Depth_Indonesia_2017_2022/v1')
-    
-    # Ambil rata-rata kedalaman dari seluruh koleksi
-    peat_depth = peat_collection.mean().select('b1') # b1 adalah kedalaman dalam cm
-    
-    # Normalisasi (skala 0-1). Asumsikan kedalaman maks 1500cm (15m)
-    # Semakin dalam, semakin tinggi skornya (semakin prioritas)
-    return peat_depth.unitScale(0, 1500).rename('score_gambut')
-# =================================
-# AKHIR PERBAIKAN #1
-# =================================
-
-def get_kriteria_degradasi():
-    """Kriteria 2: Degradasi Lahan (Tutupan Lahan). Skor 1 = Lahan Terdegradasi."""
-    worldcover = ee.ImageCollection('ESA/WorldCover/v200').first().select('Map')
-    # Remap: 10(Pohon)=0, 80(Air)=0. Lainnya=1
-    return worldcover.remap(
-        [10, 20, 30, 40, 50, 60, 80], 
-        [0,  1,  1,  1,  1,  1,  0]
-    ).rename('score_degradasi')
-
-def get_kriteria_akses():
-    """Kriteria 3: Aksesibilitas (Proksi: Kekasaran Medan). Skor 1 = Datar (Akses Mudah)."""
-    ruggedness = ee.Image("CSP/ERGo/1_0/Global/SRTM_mTPI")
-    # Balikkan skor: 1 - (skor normalisasi)
-    return ruggedness.unitScale(0, 200).subtract(1).abs().rename('score_akses')
-
-def get_kriteria_hidrologi():
-    """Kriteria 4: Jaringan Drainase. Skor 1 = Dekat Sungai/Kanal."""
-    hydro_rivers = ee.FeatureCollection("WWF/HydroSHEDS/v1/FreeFlowingRivers") \
-                     .filterBounds(AOI_BENGKALIS)
-    distance_to_rivers = hydro_rivers.distance(searchRadius=10000)
-    # Balikkan skor: 1 - (skor normalisasi)
-    return distance_to_rivers.unitScale(0, 10000).subtract(1).abs().rename('score_hidrologi')
-
-# =================================
-# AKHIR FUNGSI HELPER
-# =================================
-
 # --- API Endpoints ---
 
 @app.route("/")
@@ -128,20 +73,14 @@ def get_analysis_layers():
     try:
         image_2019 = get_processed_s2_composite('2019-07-01', '2019-10-30')
         image_2024 = get_processed_s2_composite('2024-07-01', '2024-10-30')
-            
-        nbr_2019 = image_2019.select('NBR')
-        nbr_2024 = image_2024.select('NBR')
+        nbr_2019 = image_2019.select('NBR'); nbr_2024 = image_2024.select('NBR')
         dnbr = nbr_2019.subtract(nbr_2024)
-        ndwi_2019 = image_2019.select('NDWI')
-        ndwi_2024 = image_2024.select('NDWI')
-        
+        ndwi_2019 = image_2019.select('NDWI'); ndwi_2024 = image_2024.select('NDWI')
         dnbr_vis = { 'min': 0.5, 'max': -0.5, 'palette': ['#d7191c', '#fdae61', '#ffffbf', '#a6d96a', '#1a9641'] }
         ndwi_vis = { 'min': -0.5, 'max': 0.5, 'palette': ['#f7fbff', '#c6dbef', '#6baed6', '#2171b5', '#08306b'] }
-
         map_id_dnbr = dnbr.getMapId(dnbr_vis)
         map_id_ndwi_2019 = ndwi_2019.getMapId(ndwi_vis)
         map_id_ndwi_2024 = ndwi_2024.getMapId(ndwi_vis)
-        
         return jsonify({
             'status': 'success',
             'url_dnbr': map_id_dnbr['tile_fetcher'].url_format,
@@ -152,12 +91,17 @@ def get_analysis_layers():
         app.logger.error(f"Error di GEE (Analisis): {e}") 
         return jsonify({ 'status': 'error', 'message': str(e) }), 500
 
-
+# =================================
+# ENDPOINT YANG DIPERBARUI (LOGIKA MCE BARU)
+# =================================
 @app.route("/api/get-mce-layer")
 def get_mce_layer():
-    """Endpoint API untuk Analisis MCE (Pilar 1)"""
+    """
+    Endpoint API untuk Analisis MCE (Pilar 1)
+    Menerapkan logika RECLASSIFY (Skor 1-5) dan bobot DINAMIS dari slider.
+    """
     try:
-        # 1. Ambil 4 bobot
+        # 1. Ambil 4 bobot DINAMIS dari slider (nilai 0.0 - 1.0)
         w_gambut = float(request.args.get('gambut', '50')) / 100.0 
         w_degradasi = float(request.args.get('degradasi', '50')) / 100.0
         w_akses = float(request.args.get('akses', '50')) / 100.0
@@ -165,40 +109,91 @@ def get_mce_layer():
 
         app.logger.info(f"Menerima bobot MCE: G={w_gambut}, D={w_degradasi}, A={w_akses}, H={w_hidrologi}")
 
-        # 2. Panggil fungsi helper (JAUH LEBIH RAPIH)
-        kriteria_gambut = get_kriteria_gambut()
-        kriteria_degradasi = get_kriteria_degradasi()
-        kriteria_akses = get_kriteria_akses()
-        kriteria_hidrologi = get_kriteria_hidrologi()
+        # 2. Siapkan 4 Layer Skor (LOGIKA RECLASSIFY 1-5 BARU)
+        
+        # Kriteria 1: Kedalaman Gambut (Dataset: GLOBAL-PEATLAND-DATABASE)
+        # Logika: Jika dia gambut (nilai > 0), skor jadi 5. Jika bukan (nilai 0), skor 1.
+        peat_image = ee.Image('projects/sat-io/open-datasets/GLOBAL-PEATLAND-DATABASE').select('b1')
+        k1_Gambut_Score = peat_image.gt(0).remap(
+            [0, 1],  # Nilai Asli (0=Bukan Gambut, 1=Gambut)
+            [1, 5]   # Nilai Baru (1=Aman, 5=Sangat Rentan)
+        ).rename('score_gambut')
 
-        # 3. Jalankan "Weighted Overlay"
-        final_score = kriteria_gambut.multiply(w_gambut) \
-                      .add(kriteria_degradasi.multiply(w_degradasi)) \
-                      .add(kriteria_akses.multiply(w_akses)) \
-                      .add(kriteria_hidrologi.multiply(w_hidrologi))
+        # Kriteria 2: Degradasi (Dataset: ESA/WorldCover/v200)
+        # Logika: Hutan(10)/Air(80) = Aman (Skor 1). Semak(20)/Rumput(30) = Sedang (Skor 3). Tanam(40)/Pemukiman(50)/Terbuka(60) = Rentan (Skor 5).
+        worldcover = ee.ImageCollection('ESA/WorldCover/v200').first().select('Map')
+        k2_Degradasi_Score = worldcover.remap(
+            [10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100], # Nilai Asli
+            [1,  3,  3,  4,  5,  5,  1,  1,  3,  1,  1]    # Nilai Baru (Skor 1-5)
+            # Disesuaikan sedikit dari brief Anda: Salju(70)=1, Lahan Basah(90)=3, Bakau(95)=1
+        ).rename('score_degradasi')
 
+        # Kriteria 3: Aksesibilitas (Dataset: CSP/ERGo/1_0/Global/SRTM_mTPI)
+        # Logika: Kita adaptasi dari "jarak ke jalan" menjadi "kekasaran medan"
+        # Skor 5 = Datar (Mudah Diakses, Rentan). Skor 1 = Kasar (Sulit Diakses, Aman).
+        ruggedness = ee.Image("CSP/ERGo/1_0/Global/SRTM_mTPI")
+        k3_Akses_Score = ruggedness.remap(
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], # Nilai Asli (Kekasaran)
+            [5, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 1, 1, 1, 1, 1]     # Nilai Baru (Skor 1-5)
+        ).rename('score_akses')
+
+        # Kriteria 4: Jaringan Drainase (Dataset: WWF/HydroSHEDS/v1/FreeFlowingRivers)
+        # Logika: Kita adaptasi dari "order" menjadi "jarak ke sungai/kanal"
+        # Skor 5 = Sangat Dekat (Rentan). Skor 1 = Sangat Jauh (Aman).
+        hydro_rivers = ee.FeatureCollection("WWF/HydroSHEDS/v1/FreeFlowingRivers") \
+                         .filterBounds(AOI_BENGKALIS)
+        distance_to_rivers = hydro_rivers.distance(searchRadius=10000) # Jarak maks 10km
+        k4_Drainase_Score = distance_to_rivers.remap(
+             # [jarak_input_dalam_meter]... , [skor_output]...
+             [0, 1000, 2000, 5000, 10000],  # Jarak (0-1km, 1-2km, 2-5km, 5-10km, 10km+)
+             [5, 4,    3,    2,    1]      # Skor (Sangat Rentan -> Aman)
+        ).rename('score_hidrologi')
+
+        # 3. Jalankan "Weighted Overlay" (Tumpang Susun Berbobot)
+        # Menggunakan BOBOT DINAMIS dari slider
+        final_score = k2_Degradasi_Score.multiply(w_degradasi) \
+                      .add(k1_Gambut_Score.multiply(w_gambut)) \
+                      .add(k4_Drainase_Score.multiply(w_hidrologi)) \
+                      .add(k3_Akses_Score.multiply(w_akses))
+        
+        # 4. Normalisasi hasil akhir agar tetap 1-5
+        # Total bobot (bisa < 1 atau > 1). Kita bagi dengan total bobot.
+        total_weight = w_degradasi + w_gambut + w_hidrologi + w_akses
+        # Hindari pembagian dengan nol jika semua slider 0
+        final_score_normalized = ee.Algorithms.If(
+            ee.Number(total_weight).gt(0),
+            final_score.divide(total_weight),
+            1 # Jika semua 0, skor = 1 (Aman)
+        )
+
+        # 5. Potong (clip) hasil akhir ke AOI Bengkalis
         if AOI_BENGKALIS:
-            final_score = final_score.clip(AOI_BENGKALIS)
+            final_score_normalized = ee.Image(final_score_normalized).clip(AOI_BENGKALIS)
 
-        # Palet MCE (Biru -> Kuning -> Merah)
+        # 6. Siapkan palet visualisasi (Sesuai brief Anda)
         mce_vis_params = {
-            'min': 0.0, 'max': 1.0, 
-            'palette': ['#4575b4', '#abd9e9', '#ffffbf', '#fdae61', '#d73027']
+            'min': 1.0, # Skor terendah (Paling Aman)
+            'max': 5.0, # Skor tertinggi (Paling Rentan)
+            'palette': ['#008000', '#FFFF00', '#FF0000'] # Hijau - Kuning - Merah
         }
 
-        map_id = final_score.getMapId(mce_vis_params)
+        # 7. Dapatkan URL Peta dari GEE
+        map_id = ee.Image(final_score_normalized).getMapId(mce_vis_params)
         url = map_id['tile_fetcher'].url_format
 
+        # 8. Kirim URL kembali ke front-end
         return jsonify({ 'status': 'success', 'url': url })
     except Exception as e:
         app.logger.error(f"Error di GEE (MCE): {e}") 
         return jsonify({ 'status': 'error', 'message': str(e) }), 500
+# =================================
+# AKHIR ENDPOINT YANG DIPERBARUI
+# =================================
 
 
 @app.route("/api/get-desa-bengkalis")
 def get_desa_bengkalis():
     try:
-        # Menggunakan data kabupaten Riau yang kita tahu valid
         if AOI_KABUPATEN_RIAU is None: 
             raise Exception("Data Kabupaten Riau (Level 2) tidak berhasil dimuat.")
         
