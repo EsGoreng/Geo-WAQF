@@ -9,136 +9,82 @@
       <div class="h-px bg-border-color"></div>
     </div>
     
-    <div class="flex flex-col gap-4">
+    <div id="mce-form" class="flex flex-col gap-4">
+      
       <div class="relative flex w-full flex-col items-start gap-3">
         <div class="flex w-full shrink-[3] items-center justify-between">
           <p class="text-white text-base font-medium leading-normal">
-            Tingkat Degradasi
+            Tingkat Degradasi (Lahan)
           </p>
-          <p class="text-white text-sm font-normal leading-normal">
+          <p id="mce-degradasi-value" class="text-white text-sm font-normal leading-normal">
             80%
           </p>
         </div>
-        <div class="flex h-4 w-full items-center gap-4">
-          <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-            <div class="h-full w-[80%] rounded-sm bg-primary"></div>
-            <div class="relative">
-              <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
-            </div>
-          </div>
-        </div>
+        <input 
+          id="mce-degradasi-slider"
+          type="range" min="0" max="100" value="80" 
+          class="mce-slider w-full h-1 bg-[#326732] rounded-sm appearance-none cursor-pointer"
+        >
       </div>
+      
       <div class="relative flex w-full flex-col items-start gap-3">
         <div class="flex w-full shrink-[3] items-center justify-between">
           <p class="text-white text-base font-medium leading-normal">
-            Hidrologi
+            Jaringan Drainase (Hidrologi)
           </p>
-          <p class="text-white text-sm font-normal leading-normal">
+          <p id="mce-hidrologi-value" class="text-white text-sm font-normal leading-normal">
             65%
           </p>
         </div>
-        <div class="flex h-4 w-full items-center gap-4">
-          <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-            <div class="h-full w-[65%] rounded-sm bg-primary"></div>
-            <div class="relative">
-              <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
-            </div>
-          </div>
-        </div>
+        <input 
+          id="mce-hidrologi-slider"
+          type="range" min="0" max="100" value="65" 
+          class="mce-slider w-full h-1 bg-[#326732] rounded-sm appearance-none cursor-pointer"
+        >
       </div>
+
       <div class="relative flex w-full flex-col items-start gap-3">
         <div class="flex w-full shrink-[3] items-center justify-between">
           <p class="text-white text-base font-medium leading-normal">
-            Sosial-Ekonomi
+            Kedalaman Gambut
           </p>
-          <p class="text-white text-sm font-normal leading-normal">
+          <p id="mce-gambut-value" class="text-white text-sm font-normal leading-normal">
             40%
           </p>
         </div>
-        <div class="flex h-4 w-full items-center gap-4">
-          <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-            <div class="h-full w-[40%] rounded-sm bg-primary"></div>
-            <div class="relative">
-              <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
-            </div>
-          </div>
-        </div>
+        <input 
+          id="mce-gambut-slider"
+          type="range" min="0" max="100" value="40" 
+          class="mce-slider w-full h-1 bg-[#326732] rounded-sm appearance-none cursor-pointer"
+        >
       </div>
       <div class="relative flex w-full flex-col items-start gap-3">
         <div class="flex w-full shrink-[3] items-center justify-between">
           <p class="text-white text-base font-medium leading-normal">
             Aksesibilitas
           </p>
-          <p class="text-white text-sm font-normal leading-normal">
+          <p id="mce-akses-value" class="text-white text-sm font-normal leading-normal">
             75%
           </p>
         </div>
-        <div class="flex h-4 w-full items-center gap-4">
-          <div class="flex h-1 flex-1 rounded-sm bg-[#326732]">
-            <div class="h-full w-[75%] rounded-sm bg-primary"></div>
-            <div class="relative">
-              <div class="absolute -left-2 -top-1.5 size-4 rounded-full bg-primary ring-2 ring-background-dark"></div>
-            </div>
-          </div>
-        </div>
+        <input 
+          id="mce-akses-slider"
+          type="range" min="0" max="100" value="75" 
+          class="mce-slider w-full h-1 bg-[#326732] rounded-sm appearance-none cursor-pointer"
+        >
       </div>
     </div>
     
     <div class="flex gap-3">
-      <button class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-background-dark text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
+      <button id="mce-apply-button" class="flex flex-1 min-w-[84px] cursor-pointer ...">
         <span class="truncate">Terapkan Filter</span>
       </button>
-      <button class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#326732] text-white text-sm font-medium leading-normal hover:bg-[#4a8a4a] transition-colors">
+      <button class="flex flex-1 min-w-[84px] cursor-pointer ...">
         <span class="truncate">Reset</span>
       </button>
     </div>
     
     <div class="flex flex-col gap-4 pt-4">
-      <div>
-        <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-3">
-          Top 10 Rekomendasi Intervensi
-        </h2>
-        <div class="h-px bg-border-color"></div>
       </div>
-      <div class="flex flex-col">
-        <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-2 text-xs font-bold uppercase text-text-secondary border-b border-border-color">
-          <span>#</span>
-          <span>Lokasi</span>
-          <span>Skor</span>
-        </div>
-        <div class="flex flex-col">
-          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white bg-primary/20 rounded-lg my-1 cursor-pointer">
-            <span>1</span>
-            <span>Desa Sungai Berkah</span>
-            <span>9.8</span>
-          </div>
-          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
-            <span>2</span>
-            <span>Kec. Gambut Jaya</span>
-            <span>9.5</span>
-          </div>
-          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
-            <span>3</span>
-            <span>Area Konservasi Riau</span>
-            <span>9.2</span>
-          </div>
-          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
-            <span>4</span>
-            <span>Desa Makmur Sejati</span>
-            <span>8.9</span>
-          </div>
-          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
-            <span>5</span>
-            <span>Blok Hutan Lindung</span>
-            <span>8.7</span>
-          </div>
-          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
-            <span>6</span>
-            <span>Pesisir Timur Sumatra</span>
-            <span>8.4</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>

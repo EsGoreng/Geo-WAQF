@@ -68,3 +68,49 @@
 .content-area::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary, #92c992); /* Fallback color */
 }
+
+/* =================================
+   STYLE BARU UNTUK SEMUA SLIDER MCE
+   ================================= */
+/* Chrome, Safari, Opera */
+input[type=range].mce-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;  /* 1rem (size-4) */
+  height: 16px; /* 1rem (size-4) */
+  border-radius: 9999px; /* rounded-full */
+  background: var(--accent, #11d411); /* bg-primary */
+  border: 2px solid var(--bg-dark, #102210); /* ring-2 ring-background-dark */
+  cursor: pointer;
+  margin-top: -7px; /* Menyesuaikan posisi vertikal */
+}
+
+/* Firefox */
+input[type=range].mce-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--accent, #11d411);
+  border: 2px solid var(--bg-dark, #102210);
+  cursor: pointer;
+}
+
+/* =================================
+   STYLE BARU UNTUK GEOJSON
+   ================================= */
+/* Style ini tidak terpakai (kita setel di JS),
+   tapi bisa dipakai untuk customisasi popup */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-card, #162b16) !important;
+  color: var(--text-primary, #ffffff) !important;
+  border: 1px solid var(--border-color, #234823);
+}
+.leaflet-popup-content {
+  font-family: 'Inter', sans-serif !important;
+}
+.leaflet-popup-tip {
+  background: var(--bg-card, #162b16) !important;
+}
+.leaflet-popup-close-button {
+  color: var(--text-secondary, #92c992) !important;
+}

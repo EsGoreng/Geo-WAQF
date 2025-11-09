@@ -1,4 +1,4 @@
-// Konten BARU (YANG DIPERBAIKI) untuk: src/js/spa-controller.js
+// Konten BARU (YANG DIRAPIKAN) untuk: src/js/spa-controller.js
 
 export class SPAController {
     constructor() {
@@ -8,17 +8,25 @@ export class SPAController {
         this.currentPage = null;
         this.cache = new Map();
         
+        // =================================
+        // REFACTOR (LANGKAH 1)
+        // =================================
+        this.apiBaseUrl = 'http://localhost:5000'; // Simpan URL API di satu tempat
+        
         // Properti Peta & Layer
         this.myMap = null; 
+        this.layerControl = null; 
         
+        // Layer Dinamis
+        this.dnbrLayer = null;      
+        this.ndwiLayer2019 = null;  
+        this.ndwiLayer2024 = null;  
+        this.mceLayer = null; 
+        
+        // Ganti nama 'desaLayer' menjadi 'boundaryLayer' agar lebih generik
+        this.boundaryLayer = null; 
         // =================================
-        // TAMBAHAN BARU (LANGKAH 6.2)
-        // =================================
-        this.layerControl = null; // Untuk menyimpan objek tombol toggle
-        this.layer2019 = null;    // Untuk menyimpan layer NDVI 2019
-        this.layer2024 = null;    // Untuk menyimpan layer NDVI 2024
-        // =================================
-        // AKHIR TAMBAHAN BARU
+        // AKHIR REFACTOR
         // =================================
 
         this.init();
@@ -31,6 +39,7 @@ export class SPAController {
         if (initialLink) {
             this.updateActiveLink(initialLink, false);
         }
+        this.currentPage = initialPage;
         this.loadPage(initialPage, false);
         this.setupNavigation();
         window.addEventListener('popstate', (e) => {
@@ -39,6 +48,7 @@ export class SPAController {
                 if (newLink) {
                     this.updateActiveLink(newLink, false);
                 }
+                this.currentPage = e.state.page; 
                 this.loadPage(e.state.page, false);
             }
         });
@@ -54,6 +64,7 @@ export class SPAController {
                 const page = link.getAttribute('data-page');
                 if (page && page !== this.currentPage) {
                     this.updateActiveLink(link, true);
+                    this.currentPage = page; 
                     this.loadPage(page, true);
                     if (sidebar && sidebarOverlay && window.innerWidth < 768) { 
                         sidebar.classList.add('-translate-x-full');
@@ -75,37 +86,36 @@ export class SPAController {
         }
         if (pushState) {
             const pageUrl = activeLink.getAttribute('data-page');
+            this.currentPage = pageUrl;
             history.pushState({ page: pageUrl }, title, `#${pageUrl.replace('.html', '')}`);
         }
     }
 
     async loadPage(pageUrl, pushState = true) {
         try {
-            // =================================
-            // PERUBAHAN BARU (LANGKAH 6.2)
-            // =================================
-            // Hancurkan instance peta, kontrol, dan layer lama
+            // Bersihkan semua layer dan peta lama
             if (this.layerControl) {
                 this.layerControl.remove();
                 this.layerControl = null;
             }
-            if (this.layer2019) {
-                this.layer2019.remove();
-                this.layer2019 = null;
+            if (this.dnbrLayer) this.dnbrLayer.remove();
+            if (this.ndwiLayer2019) this.ndwiLayer2019.remove();
+            if (this.ndwiLayer2024) this.ndwiLayer2024.remove();
+            if (this.mceLayer) this.mceLayer.remove();
+            
+            // Ganti nama 'desaLayer'
+            if (this.boundaryLayer) {
+                this.boundaryLayer.remove();
+                this.boundaryLayer = null;
             }
-             if (this.layer2024) {
-                this.layer2024.remove();
-                this.layer2024 = null;
-            }
+            
             if (this.myMap) {
                 this.myMap.remove();
                 this.myMap = null;
             }
-            // =================================
-            // AKHIR PERUBAHAN BARU
-            // =================================
-
-            this.showLoading();
+            
+            this.currentPage = pageUrl;
+            this.showLoading(); // Tampilkan Spinner
 
             // ... (Kode sisa loadPage() Anda tidak berubah) ...
             const fetchUrl = `src/pages/${pageUrl}`; 
@@ -130,10 +140,9 @@ export class SPAController {
                 console.warn(`Page ${pageUrl} doesn't have a <main> tag.`);
             }
             await this.loadSubComponents(this.contentArea);
-            this.currentPage = pageUrl;
-            this.initPageScripts();
-            this.hideLoading();
-
+            this.initPageScripts(); // Peta dasar & event
+            this.hideLoading(); // Sembunyikan spinner
+            this.loadPageData(); // Muat data GEE di latar belakang
         } catch (error) {
             console.error('Failed to load page:', error);
             this.showError(error.message);
@@ -206,100 +215,264 @@ export class SPAController {
     hideLoading() { /* ... */ }
     showError(message) { /* ... (Kode error Anda) ... */ }
     
-
+    
     initPageScripts() {
         this.initializeMap();
+        if (this.myMap) {
+            if (this.currentPage === 'page_pilar1.html') {
+                this.setupMceControls();
+            }
+        }
     }
 
-    // =================================
-    // PERUBAHAN BARU (LANGKAH 6.2)
-    // =================================
+    async loadPageData() {
+        if (!this.myMap) return; 
+        
+        switch (this.currentPage) {
+            case 'page_home.html':
+            case 'page_pilar2.html': 
+                await this.loadAnalysisLayers();
+                break;
+            case 'page_pilar1.html':
+                break; // Layer MCE dimuat saat klik tombol
+            case 'page_pilar3.html':
+                break;
+        }
+        // Muat batas kabupaten di semua halaman
+        await this.loadBoundaryLayer();
+    }
+
+
     initializeMap() {
+        // ... (Fungsi initializeMap() Anda tidak berubah) ...
         const mapElement = document.getElementById('map-canvas');
         if (!mapElement) {
             return; 
         }
-
         try {
-            console.log("Inisialisasi Peta Leaflet...");
-            this.myMap = L.map('map-canvas').setView([-2.5489, 118.0149], 5); 
-
+            this.myMap = L.map('map-canvas').setView([1.47, 102.11], 10); 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https.www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 maxZoom: 19
             }).addTo(this.myMap);
-
-            // Buat grup 'base layers' kosong (kita akan isi nanti)
-            const baseLayers = {};
-            
-            // Buat 'layer control' (tombol toggle) dan tambahkan ke peta
-            this.layerControl = L.control.layers(baseLayers, null, {
-                position: 'topright',
-                collapsed: false // Buat tidak tersembunyi
-            }).addTo(this.myMap);
-            
-            // Panggil fungsi untuk memuat layer GEE
-            this.loadGeeLayer();
-
         } catch (error) {
             console.error("Gagal menginisialisasi Leaflet:", error);
             mapElement.innerHTML = "<p class='text-red-400 p-4'>Gagal memuat peta. Apakah Leaflet.js sudah dimuat?</p>";
         }
     }
 
+    // =================================
+    // REFACTOR (LANGKAH 2)
+    // =================================
+    
     /**
-     * --- FUNGSI YANG DIPERBARUI (LANGKAH 6.2) ---
-     * Menghubungi backend Flask untuk mendapatkan DUA URL layer GEE
-     * dan menampilkannya di peta dengan tombol kontrol.
+     * Fungsi helper generik untuk memanggil API backend
+     * @param {string} endpoint - Path API (misal: '/api/get-analysis-layers')
+     * @returns {Promise<object>} Data JSON dari server
      */
-    async loadGeeLayer() {
-        if (!this.myMap || !this.layerControl) return; // Pastikan peta & kontrol ada
-
-        console.log("Menghubungi backend di http://localhost:5000/api/get-ndvi-layer ...");
-        
+    async fetchFromApi(endpoint) {
+        console.log(`Menghubungi backend di: ${this.apiBaseUrl}${endpoint}`);
         try {
-            const response = await fetch('/api/get-ndvi-layer');
-            
+            const response = await fetch(`${this.apiBaseUrl}${endpoint}`);
             if (!response.ok) {
                 throw new Error(`Gagal mengambil data dari server: ${response.statusText}`);
             }
-
             const data = await response.json();
-
             if (data.status === 'success') {
-                console.log("Data GEE 2019 & 2024 diterima. Menambahkan layer...");
-                
-                // 1. Buat layer untuk 2019 dan 2024
-                this.layer2019 = L.tileLayer(data.url_2019, {
-                    attribution: 'GEE NDVI 2019'
-                });
-                
-                this.layer2024 = L.tileLayer(data.url_2024, {
-                    attribution: 'GEE NDVI 2024'
-                });
-
-                // 2. Tambahkan layer ke 'layer control' (tombol toggle)
-                this.layerControl.addBaseLayer(this.layer2019, "NDVI 2019");
-                this.layerControl.addBaseLayer(this.layer2024, "NDVI 2024");
-                
-                // 3. Tambahkan salah satu layer (misal 2024) ke peta secara default
-                this.layer2024.addTo(this.myMap);
-            
+                return data; // Kembalikan data yang sukses
             } else {
                 throw new Error(`Error dari server GEE: ${data.message}`);
             }
-        
         } catch (error) {
-            console.error("Gagal memuat layer GEE:", error);
-            if(document.getElementById('map-canvas')) {
-                L.popup()
-                 .setLatLng([-2.5489, 118.0149])
-                 .setContent(`Gagal memuat layer GEE: ${error.message}. Pastikan server backend Anda berjalan.`)
-                 .openOn(this.myMap);
+            console.error(`Gagal memuat dari ${endpoint}:`, error);
+            // Tampilkan popup error di peta
+            if (this.myMap) {
+                L.popup().setLatLng([1.47, 102.11]).setContent(`Gagal memuat layer: ${error.message}.`).openOn(this.myMap);
             }
+            throw error; // Lempar error agar fungsi pemanggil bisa berhenti
         }
     }
+    
+    /**
+     * Memuat layer dNBR dan NDWI (sekarang menggunakan helper)
+     */
+    async loadAnalysisLayers() {
+        if (!this.myMap) return; 
+        
+        try {
+            // 1. Panggil helper
+            const data = await this.fetchFromApi('/api/get-analysis-layers');
+            
+            // 2. Buat layer control jika belum ada
+            if (!this.layerControl) {
+                this.layerControl = L.control.layers({}, null, {
+                    position: 'topright',
+                    collapsed: false
+                }).addTo(this.myMap);
+            }
+            
+            // 3. Buat TIGA layer baru
+            this.dnbrLayer = L.tileLayer(data.url_dnbr, { attribution: 'GEE dNBR (Sentinel-2)' });
+            this.ndwiLayer2019 = L.tileLayer(data.url_ndwi_2019, { attribution: 'GEE NDWI 2019 (Sentinel-2)' });
+            this.ndwiLayer2024 = L.tileLayer(data.url_ndwi_2024, { attribution: 'GEE NDWI 2024 (Sentinel-2)' });
+
+            // 4. Tambahkan ke toggle
+            this.layerControl.addBaseLayer(this.dnbrLayer, "<b>Bukti: dNBR (Perubahan)</b>");
+            this.layerControl.addBaseLayer(this.ndwiLayer2019, "NDWI 2019 (Basah)");
+            this.layerControl.addBaseLayer(this.ndwiLayer2024, "NDWI 2024 (Basah)");
+            
+            // 5. Tampilkan default
+            this.dnbrLayer.addTo(this.myMap);
+
+        } catch (error) {
+            console.error("Gagal memuat layer analisis (loadAnalysisLayers).");
+        }
+    }
+    
+    setupMceControls() {
+        // ... (Fungsi setupMceControls() Anda tidak berubah) ...
+        const mceForm = document.getElementById('mce-form');
+        const applyButton = document.getElementById('mce-apply-button');
+        if (!mceForm || !applyButton) {
+            return;
+        }
+        const sliders = mceForm.querySelectorAll('.mce-slider');
+        sliders.forEach(slider => {
+            const valueLabel = document.getElementById(slider.id.replace('slider', 'value'));
+            if (valueLabel) {
+                slider.addEventListener('input', (e) => {
+                    valueLabel.textContent = `${e.target.value}%`;
+                });
+            }
+        });
+        applyButton.addEventListener('click', () => {
+            const mceWeights = {
+                degradasi: document.getElementById('mce-degradasi-slider').value,
+                hidrologi: document.getElementById('mce-hidrologi-slider').value,
+                gambut: document.getElementById('mce-gambut-slider').value,
+                akses: document.getElementById('mce-akses-slider').value
+            };
+            this.loadMceLayer(mceWeights);
+        });
+    }
+
+    /**
+     * Memuat layer MCE (sekarang menggunakan helper)
+     */
+    async loadMceLayer(mceWeights) {
+        if (!this.myMap) return; 
+
+        const applyButton = document.getElementById('mce-apply-button');
+        if (applyButton) applyButton.innerHTML = `<span class="truncate">Memuat...</span>`;
+
+        try {
+            // 1. Buat parameter query string
+            const params = new URLSearchParams(mceWeights).toString();
+            
+            // 2. Panggil helper
+            const data = await this.fetchFromApi(`/api/get-mce-layer?${params}`);
+
+            // 3. Hapus layer MCE lama (jika ada)
+            if (this.mceLayer) {
+                this.mceLayer.remove();
+                if (this.layerControl) {
+                    this.layerControl.removeLayer(this.mceLayer);
+                }
+            }
+
+            // 4. Buat layer MCE yang baru
+            this.mceLayer = L.tileLayer(data.url, {
+                attribution: 'Analisis MCE (Geo-WAQF)',
+                opacity: 0.7 
+            });
+
+            // 5. Tambahkan layer baru ke peta
+            this.mceLayer.addTo(this.myMap);
+            
+            // 6. Tambahkan ke toggle
+            if (this.layerControl) {
+                this.layerControl.addOverlay(this.mceLayer, "Skor MCE");
+            }
+
+        } catch (error) {
+             console.error("Gagal memuat layer MCE (loadMceLayer).");
+        } finally {
+            if (applyButton) applyButton.innerHTML = `<span class.truncate">Terapkan Filter</span>`;
+        }
+    }
+
+    /**
+     * Ganti nama 'loadDesaLayer' menjadi 'loadBoundaryLayer' (Refactor)
+     */
+    async loadBoundaryLayer() {
+        if (!this.myMap) return; 
+        
+        try {
+            // 1. Panggil helper
+            const data = await this.fetchFromApi('/api/get-desa-bengkalis');
+
+            // 2. Buat layer GeoJSON
+            this.boundaryLayer = L.geoJSON(data.geojson, { // Ganti nama properti
+                style: {
+                    color: "#11d411", 
+                    weight: 1,
+                    opacity: 0.5,
+                    fillOpacity: 0.0 
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.on({
+                        mouseover: (e) => this.highlightFeature(e),
+                        mouseout: (e) => this.resetHighlight(e),
+                        click: (e) => this.zoomToFeature(e)
+                    });
+                }
+            }).addTo(this.myMap);
+            
+            // 3. Tambahkan ke toggle
+            if (this.layerControl) {
+                this.layerControl.addOverlay(this.boundaryLayer, "Batas Kabupaten");
+            } else {
+                this.layerControl = L.control.layers({}, {"Batas Kabupaten": this.boundaryLayer}, {
+                    position: 'topright',
+                    collapsed: false
+                }).addTo(this.myMap);
+            }
+        } catch (error) {
+             console.error("Gagal memuat layer GeoJSON kabupaten (loadBoundaryLayer).");
+        }
+    }
+
+    // ... (Fungsi event handler GeoJSON tidak berubah) ...
+    highlightFeature(e) {
+        const layer = e.target;
+        layer.setStyle({
+            weight: 3,
+            color: '#11d411', 
+            opacity: 1.0,
+            fillOpacity: 0.1 
+        });
+        layer.bringToFront();
+    }
+    resetHighlight(e) {
+        // Ganti nama 'desaLayer'
+        if (this.boundaryLayer) {
+            this.boundaryLayer.resetStyle(e.target);
+        }
+    }
+
+    zoomToFeature(e) {
+        // ... (Fungsi zoomToFeature() Anda tidak berubah) ...
+        const layer = e.target;
+        const properties = layer.feature.properties;
+        const namaKab = properties.ADM2_NAME || 'Area Terpilih';
+        const namaProv = properties.ADM1_NAME || 'N/A';
+        const kodeKab = properties.ADM2_CODE || 'N/A';
+        L.popup()
+         .setLatLng(e.latlng)
+         .setContent(`<b>Kabupaten: ${namaKab}</b><br>Provinsi: ${namaProv}<br>ID: ${kodeKab}<br><br><button class="bg-primary text-background-dark px-3 py-1 rounded">Donasi (Waqf) untuk area ini</button>`)
+         .openOn(this.myMap);
+    }
     // =================================
-    // AKHIR PERUBAHAN BARU
+    // AKHIR REFACTOR
     // =================================
 }
