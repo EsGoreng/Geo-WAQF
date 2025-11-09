@@ -76,15 +76,50 @@
     </div>
     
     <div class="flex gap-3">
-      <button id="mce-apply-button" class="flex flex-1 min-w-[84px] cursor-pointer ...">
+      <button id="mce-apply-button" class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-background-dark text-sm font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
         <span class="truncate">Terapkan Filter</span>
       </button>
-      <button class="flex flex-1 min-w-[84px] cursor-pointer ...">
+      <button class="flex flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#326732] text-white text-sm font-medium leading-normal hover:bg-[#4a8a4a] transition-colors">
         <span class="truncate">Reset</span>
       </button>
     </div>
     
     <div class="flex flex-col gap-4 pt-4">
+      <div>
+        <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-3">
+          Top 10 Rekomendasi Intervensi
+        </h2>
+        <div class="h-px bg-border-color"></div>
       </div>
-  </div>
+      <div class="flex flex-col">
+        <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-2 text-xs font-bold uppercase text-text-secondary border-b border-border-color">
+          <span>#</span>
+          <span>Lokasi (Kabupaten)</span>
+          <span>Skor</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white bg-primary/20 rounded-lg my-1 cursor-pointer">
+            <span>1</span>
+            <span>Bengkalis</span>
+            <span class="font-bold text-lg">4.8</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+            <span>2</span>
+            <span>Siak</span>
+            <span class="font-bold text-lg">4.5</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+            <span>3</span>
+            <span>Pelalawan</span>
+            <span class="font-bold text-lg">4.2</span>
+          </div>
+          <div class="grid grid-cols-[2rem_1fr_auto] items-center gap-4 px-3 py-3 text-sm text-white rounded-lg hover:bg-white/10 cursor-pointer transition-colors">
+            <span>4</span>
+            <span>Indragiri Hilir</span>
+            <span class="font-bold text-lg">3.9</span>
+          </div>
+          </div>
+      </div>
+    </div>
+    </div>
 </div>

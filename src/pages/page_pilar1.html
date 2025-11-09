@@ -1,24 +1,36 @@
 <main class="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_380px] h-full">
   
   <div class="flex-1 flex flex-col p-4 md:p-6 lg:p-8">
-    <div class="flex flex-wrap justify-between gap-3 mb-6">
+    
+    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
       <div class="flex min-w-72 flex-col gap-2">
         <p class="text-text-secondary text-base font-normal leading-normal">
           Gunakan kontrol Analisis Multi-Kriteria untuk memfilter dan memeringkat area intervensi di peta.
         </p>
       </div>
+      <label class="flex flex-col min-w-40 h-12 w-full sm:w-72">
+        <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+          <div class="text-text-secondary flex border-none bg-card-dark items-center justify-center pl-4 rounded-l-lg border-r-0">
+            <span class="material-symbols-outlined">search</span>
+          </div>
+          <input
+            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-0 border-none bg-card-dark focus:border-none h-full placeholder:text-text-secondary px-4 text-base font-normal leading-normal"
+            placeholder="Cari Lokasi/Desa"
+            value=""
+          />
+        </div>
+      </label>
     </div>
     
-    <div data-component-src="src/components/shared/map_container.html"
-         data-map-title="Peta Intervensi (MCE)"
-         data-show-search="true"
-         data-legend-src="src/components/legends/legend_priority_zones.html"
-         data-show-zoom="true"
-         data-show-nav="true">
-      </div>
+    <div class="flex-1 flex">
+      <div data-component-src="src/components/shared/map_container.html"
+          data-map-title="Peta Intervensi Prioritas (MCE)"
+          data-legend-src="src/components/legends/legend_mce_gradient.html" data-show-zoom="true"
+          data-show-nav="true"
+          class="flex-1">
+        </div>
+    </div>
   </div>
-  </div>
-
 
   <div data-component-src="src/components/pilar1_panel.html">
     </div>

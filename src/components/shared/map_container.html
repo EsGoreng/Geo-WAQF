@@ -1,27 +1,10 @@
-<div class="bg-card-dark rounded-xl shadow-lg border border-border-color overflow-hidden">
+<div class="bg-card-dark rounded-xl shadow-lg border border-border-color overflow-hidden h-full flex flex-col">
   
   <div class="p-4 md:p-6 border-b border-border-color">
     <h3 class="font-semibold text-white text-lg">{{MAP_TITLE}}</h3>
   </div>
 
-  {{IF_SHOW_SEARCH}}
-  <div class="p-4 md:p-6 border-b border-border-color bg-background-dark">
-    <label class="flex flex-col min-w-40 h-12 w-full max-w-sm">
-      <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
-        <div class="text-text-secondary flex border-none bg-card-dark items-center justify-center pl-4 rounded-l-lg border-r-0">
-          <span class="material-symbols-outlined">search</span>
-        </div>
-        <input
-          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-0 border-none bg-card-dark focus:border-none h-full placeholder:text-text-secondary px-4 text-base font-normal leading-normal"
-          placeholder="Cari Lokasi"
-          value=""
-        />
-      </div>
-    </label>
-  </div>
-  {{END_IF_SHOW_SEARCH}}
-
-  <div class="relative bg-background-dark aspect-video md:aspect-auto md:h-[500px]">
+  <div class="relative bg-background-dark flex-1 min-h-[400px]">
     
     <div id="map-canvas" style="height: 100%; width: 100%; background-color: #102210;">
       </div>

@@ -1,22 +1,25 @@
 <main>
   <div class="p-4 md:p-6 lg:p-8 flex-1">
-
+    
     <div data-component-src="src/components/home_stat_cards.html">
       </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+    <div class="flex flex-col gap-6 md:gap-8">
+    
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        
+        <div data-component-src="src/components/shared/map_container.html" 
+             data-map-title="Peta Perubahan (dNBR) 2019-2024"
+             data-show-zoom="true"
+             class="lg:col-span-8">
+             </div>
+        
+        <div data-component-src="src/components/home_widgets.html" class="lg:col-span-4">
+             </div>
 
-      <div data-component-src="src/components/shared/map_container.html" 
-               data-map-title="Peta Area Restorasi Gambut"
-               data-legend-src="src/components/legends/legend_priority_zones.html"
-               data-show-zoom="true"
-               class="lg:col-span-8">
-            </div>
-
-      <div data-component-src="src/components/home_widgets.html" class="lg:col-span-4 ...">
-        </div>
-
-      <div data-component-src="src/components/home_tren.html" class="lg:col-span-4 ...">
+      </div>
+      
+      <div data-component-src="src/components/home_gap_table.html">
         </div>
 
     </div>
