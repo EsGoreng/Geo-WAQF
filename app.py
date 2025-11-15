@@ -2,25 +2,53 @@ import ee
 from flask import Flask, jsonify, request 
 from flask_cors import CORS
 import json 
+import os       # <-- Ditambahkan
+import base64   # <-- Ditambahkan
 
 # --- Inisialisasi Aplikasi ---
 
 app = Flask(__name__)
 CORS(app) 
 
+# ==========================================================
+# --- Inisialisasi GEE (VERSI BARU UNTUK VERCELL) ---
+# ==========================================================
 try:
-    key_file = 'service-account.json' 
-    with open(key_file) as f:
-        service_account_email = json.load(f)['client_email']
+    # 1. Ambil JSON string dari Environment Variable (Base64)
+    # Nama 'GEE_SERVICE_ACCOUNT_JSON_BASE64' harus sama dengan di Vercel
+    env_key_base64 = os.environ.get('GEE_SERVICE_ACCOUNT_JSON_BASE64')
+    
+    if not env_key_base64:
+        raise Exception("Variabel GEE_SERVICE_ACCOUNT_JSON_BASE64 tidak ditemukan.")
+
+    # 2. Decode Base64 menjadi string JSON biasa
+    key_content_str = base64.b64decode(env_key_base64).decode('utf-8')
+    key_content_json = json.loads(key_content_str)
+    service_account_email = key_content_json['client_email']
+
+    # 3. Tulis string JSON ke file temporer
+    # Di Vercel, HANYA folder /tmp yang bisa ditulis
+    key_file_path = '/tmp/service-account.json'
+    with open(key_file_path, 'w') as f:
+        f.write(key_content_str)
+    
+    app.logger.info("Berhasil menulis key GEE ke /tmp/service-account.json")
+
+    # 4. Gunakan file temporer tersebut untuk autentikasi GEE
     credentials = ee.ServiceAccountCredentials(
         service_account_email, 
-        key_file
+        key_file_path  # <-- Gunakan path file temporer
     )
     ee.Initialize(credentials=credentials)
-    app.logger.info("Koneksi GEE (via Akun Layanan) berhasil.")
+    app.logger.info("Koneksi GEE (via Akun Layanan /tmp) berhasil.")
+
 except Exception as e:
     app.logger.error(f"Autentikasi GEE gagal: {e}")
-    exit()
+    # Biarkan error ini terjadi agar endpoint gagal jika auth tidak berhasil
+# ==========================================================
+# --- AKHIR BLOK Inisialisasi GEE BARU ---
+# ==========================================================
+
 
 # --- Definisi AOI ---
 try:
@@ -92,7 +120,7 @@ def get_analysis_layers():
         return jsonify({ 'status': 'error', 'message': str(e) }), 500
 
 # =================================
-# ENDPOINT YANG DIPERBARUI (LOGIKA MCE BARU)
+# ENDPOINT MCE
 # =================================
 @app.route("/api/get-mce-layer")
 def get_mce_layer():
@@ -112,7 +140,6 @@ def get_mce_layer():
         # 2. Siapkan 4 Layer Skor (LOGIKA RECLASSIFY 1-5 BARU)
         
         # Kriteria 1: Kedalaman Gambut (Dataset: GLOBAL-PEATLAND-DATABASE)
-        # Logika: Jika dia gambut (nilai > 0), skor jadi 5. Jika bukan (nilai 0), skor 1.
         peat_image = ee.Image('projects/sat-io/open-datasets/GLOBAL-PEATLAND-DATABASE').select('b1')
         k1_Gambut_Score = peat_image.gt(0).remap(
             [0, 1],  # Nilai Asli (0=Bukan Gambut, 1=Gambut)
@@ -120,17 +147,13 @@ def get_mce_layer():
         ).rename('score_gambut')
 
         # Kriteria 2: Degradasi (Dataset: ESA/WorldCover/v200)
-        # Logika: Hutan(10)/Air(80) = Aman (Skor 1). Semak(20)/Rumput(30) = Sedang (Skor 3). Tanam(40)/Pemukiman(50)/Terbuka(60) = Rentan (Skor 5).
         worldcover = ee.ImageCollection('ESA/WorldCover/v200').first().select('Map')
         k2_Degradasi_Score = worldcover.remap(
             [10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100], # Nilai Asli
             [1,  3,  3,  4,  5,  5,  1,  1,  3,  1,  1]    # Nilai Baru (Skor 1-5)
-            # Disesuaikan sedikit dari brief Anda: Salju(70)=1, Lahan Basah(90)=3, Bakau(95)=1
         ).rename('score_degradasi')
 
         # Kriteria 3: Aksesibilitas (Dataset: CSP/ERGo/1_0/Global/SRTM_mTPI)
-        # Logika: Kita adaptasi dari "jarak ke jalan" menjadi "kekasaran medan"
-        # Skor 5 = Datar (Mudah Diakses, Rentan). Skor 1 = Kasar (Sulit Diakses, Aman).
         ruggedness = ee.Image("CSP/ERGo/1_0/Global/SRTM_mTPI")
         k3_Akses_Score = ruggedness.remap(
             [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], # Nilai Asli (Kekasaran)
@@ -138,28 +161,22 @@ def get_mce_layer():
         ).rename('score_akses')
 
         # Kriteria 4: Jaringan Drainase (Dataset: WWF/HydroSHEDS/v1/FreeFlowingRivers)
-        # Logika: Kita adaptasi dari "order" menjadi "jarak ke sungai/kanal"
-        # Skor 5 = Sangat Dekat (Rentan). Skor 1 = Sangat Jauh (Aman).
         hydro_rivers = ee.FeatureCollection("WWF/HydroSHEDS/v1/FreeFlowingRivers") \
                          .filterBounds(AOI_BENGKALIS)
         distance_to_rivers = hydro_rivers.distance(searchRadius=10000) # Jarak maks 10km
         k4_Drainase_Score = distance_to_rivers.remap(
-             # [jarak_input_dalam_meter]... , [skor_output]...
              [0, 1000, 2000, 5000, 10000],  # Jarak (0-1km, 1-2km, 2-5km, 5-10km, 10km+)
              [5, 4,    3,    2,    1]      # Skor (Sangat Rentan -> Aman)
         ).rename('score_hidrologi')
 
         # 3. Jalankan "Weighted Overlay" (Tumpang Susun Berbobot)
-        # Menggunakan BOBOT DINAMIS dari slider
         final_score = k2_Degradasi_Score.multiply(w_degradasi) \
                       .add(k1_Gambut_Score.multiply(w_gambut)) \
                       .add(k4_Drainase_Score.multiply(w_hidrologi)) \
                       .add(k3_Akses_Score.multiply(w_akses))
         
         # 4. Normalisasi hasil akhir agar tetap 1-5
-        # Total bobot (bisa < 1 atau > 1). Kita bagi dengan total bobot.
         total_weight = w_degradasi + w_gambut + w_hidrologi + w_akses
-        # Hindari pembagian dengan nol jika semua slider 0
         final_score_normalized = ee.Algorithms.If(
             ee.Number(total_weight).gt(0),
             final_score.divide(total_weight),
@@ -170,10 +187,9 @@ def get_mce_layer():
         if AOI_BENGKALIS:
             final_score_normalized = ee.Image(final_score_normalized).clip(AOI_BENGKALIS)
 
-        # 6. Siapkan palet visualisasi (Sesuai brief Anda)
+        # 6. Siapkan palet visualisasi
         mce_vis_params = {
-            'min': 1.0, # Skor terendah (Paling Aman)
-            'max': 5.0, # Skor tertinggi (Paling Rentan)
+            'min': 1.0, 'max': 5.0,
             'palette': ['#008000', '#FFFF00', '#FF0000'] # Hijau - Kuning - Merah
         }
 
@@ -187,7 +203,7 @@ def get_mce_layer():
         app.logger.error(f"Error di GEE (MCE): {e}") 
         return jsonify({ 'status': 'error', 'message': str(e) }), 500
 # =================================
-# AKHIR ENDPOINT YANG DIPERBARUI
+# AKHIR ENDPOINT MCE
 # =================================
 
 
@@ -208,5 +224,8 @@ def get_desa_bengkalis():
 
 # --- Menjalankan Server ---
 
-if __name__ == '__main__':
-    app.run(debug=False, port=5000)
+# if __name__ == '__main__':
+#     app.run(debug=False, port=5000)
+    
+# Catatan: Baris di atas sengaja dinonaktifkan.
+# Vercel akan menjalankan aplikasi menggunakan 'gunicorn' (WSGI server).

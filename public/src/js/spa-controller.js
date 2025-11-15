@@ -1,4 +1,4 @@
-// Konten BARU (YANG DIRAPIKAN) untuk: src/js/spa-controller.js
+// Konten BARU (YANG DIPERBAIKI) untuk: src/js/spa-controller.js
 
 export class SPAController {
     constructor() {
@@ -8,9 +8,6 @@ export class SPAController {
         this.currentPage = null;
         this.cache = new Map();
         
-        // =================================
-        // REFACTOR (LANGKAH 1)
-        // =================================
         this.apiBaseUrl = 'http://localhost:5000'; // Simpan URL API di satu tempat
         
         // Properti Peta & Layer
@@ -22,12 +19,7 @@ export class SPAController {
         this.ndwiLayer2019 = null;  
         this.ndwiLayer2024 = null;  
         this.mceLayer = null; 
-        
-        // Ganti nama 'desaLayer' menjadi 'boundaryLayer' agar lebih generik
         this.boundaryLayer = null; 
-        // =================================
-        // AKHIR REFACTOR
-        // =================================
 
         this.init();
     }
@@ -102,13 +94,10 @@ export class SPAController {
             if (this.ndwiLayer2019) this.ndwiLayer2019.remove();
             if (this.ndwiLayer2024) this.ndwiLayer2024.remove();
             if (this.mceLayer) this.mceLayer.remove();
-            
-            // Ganti nama 'desaLayer'
             if (this.boundaryLayer) {
                 this.boundaryLayer.remove();
                 this.boundaryLayer = null;
             }
-            
             if (this.myMap) {
                 this.myMap.remove();
                 this.myMap = null;
@@ -260,16 +249,7 @@ export class SPAController {
             mapElement.innerHTML = "<p class='text-red-400 p-4'>Gagal memuat peta. Apakah Leaflet.js sudah dimuat?</p>";
         }
     }
-
-    // =================================
-    // REFACTOR (LANGKAH 2)
-    // =================================
     
-    /**
-     * Fungsi helper generik untuk memanggil API backend
-     * @param {string} endpoint - Path API (misal: '/api/get-analysis-layers')
-     * @returns {Promise<object>} Data JSON dari server
-     */
     async fetchFromApi(endpoint) {
         console.log(`Menghubungi backend di: ${this.apiBaseUrl}${endpoint}`);
         try {
@@ -285,25 +265,19 @@ export class SPAController {
             }
         } catch (error) {
             console.error(`Gagal memuat dari ${endpoint}:`, error);
-            // Tampilkan popup error di peta
             if (this.myMap) {
                 L.popup().setLatLng([1.47, 102.11]).setContent(`Gagal memuat layer: ${error.message}.`).openOn(this.myMap);
             }
-            throw error; // Lempar error agar fungsi pemanggil bisa berhenti
+            throw error; 
         }
     }
     
-    /**
-     * Memuat layer dNBR dan NDWI (sekarang menggunakan helper)
-     */
     async loadAnalysisLayers() {
         if (!this.myMap) return; 
         
         try {
-            // 1. Panggil helper
             const data = await this.fetchFromApi('/api/get-analysis-layers');
             
-            // 2. Buat layer control jika belum ada
             if (!this.layerControl) {
                 this.layerControl = L.control.layers({}, null, {
                     position: 'topright',
@@ -311,17 +285,14 @@ export class SPAController {
                 }).addTo(this.myMap);
             }
             
-            // 3. Buat TIGA layer baru
             this.dnbrLayer = L.tileLayer(data.url_dnbr, { attribution: 'GEE dNBR (Sentinel-2)' });
             this.ndwiLayer2019 = L.tileLayer(data.url_ndwi_2019, { attribution: 'GEE NDWI 2019 (Sentinel-2)' });
             this.ndwiLayer2024 = L.tileLayer(data.url_ndwi_2024, { attribution: 'GEE NDWI 2024 (Sentinel-2)' });
 
-            // 4. Tambahkan ke toggle
-            this.layerControl.addBaseLayer(this.dnbrLayer, "<b>Bukti: dNBR (Perubahan)</b>");
+            this.layerControl.addBaseLayer(this.dnbrLayer, "dNBR (Perubahan)");
             this.layerControl.addBaseLayer(this.ndwiLayer2019, "NDWI 2019 (Basah)");
             this.layerControl.addBaseLayer(this.ndwiLayer2024, "NDWI 2024 (Basah)");
             
-            // 5. Tampilkan default
             this.dnbrLayer.addTo(this.myMap);
 
         } catch (error) {
@@ -356,63 +327,67 @@ export class SPAController {
         });
     }
 
-    /**
-     * Memuat layer MCE (sekarang menggunakan helper)
-     */
+    // =================================
+    // FUNGSI YANG DIPERBARUI (Perbaikan Bug)
+    // =================================
     async loadMceLayer(mceWeights) {
         if (!this.myMap) return; 
 
         const applyButton = document.getElementById('mce-apply-button');
+        // PERBAIKI TYPO: Tambahkan 'truncate'
         if (applyButton) applyButton.innerHTML = `<span class="truncate">Memuat...</span>`;
 
         try {
-            // 1. Buat parameter query string
             const params = new URLSearchParams(mceWeights).toString();
-            
-            // 2. Panggil helper
             const data = await this.fetchFromApi(`/api/get-mce-layer?${params}`);
 
-            // 3. Hapus layer MCE lama (jika ada)
+            // =================================
+            // PERBAIKAN BUG UTAMA DI SINI
+            // =================================
+            // Hapus layer MCE lama dari PETA dan dari KONTROL
             if (this.mceLayer) {
-                this.mceLayer.remove();
+                this.mceLayer.remove(); // Hapus dari peta
                 if (this.layerControl) {
-                    this.layerControl.removeLayer(this.mceLayer);
+                    this.layerControl.removeLayer(this.mceLayer); // Hapus dari menu toggle
                 }
             }
+            // =================================
+            // AKHIR PERBAIKAN BUG
+            // =================================
 
-            // 4. Buat layer MCE yang baru
             this.mceLayer = L.tileLayer(data.url, {
                 attribution: 'Analisis MCE (Geo-WAQF)',
                 opacity: 0.7 
             });
 
-            // 5. Tambahkan layer baru ke peta
             this.mceLayer.addTo(this.myMap);
             
-            // 6. Tambahkan ke toggle
-            if (this.layerControl) {
-                this.layerControl.addOverlay(this.mceLayer, "Skor MCE");
+            // Buat layer control jika belum ada (saat di Pilar 1)
+            if (!this.layerControl) {
+                this.layerControl = L.control.layers({}, null, {
+                    position: 'topright',
+                    collapsed: false
+                }).addTo(this.myMap);
             }
+            
+            // Tambahkan layer baru ke toggle
+            this.layerControl.addOverlay(this.mceLayer, "Skor MCE");
 
         } catch (error) {
              console.error("Gagal memuat layer MCE (loadMceLayer).");
         } finally {
-            if (applyButton) applyButton.innerHTML = `<span class.truncate">Terapkan Filter</span>`;
+            // PERBAIKI TYPO: Tambahkan 'truncate'
+            if (applyButton) applyButton.innerHTML = `<span class="truncate">Terapkan Filter</span>`;
         }
     }
 
-    /**
-     * Ganti nama 'loadDesaLayer' menjadi 'loadBoundaryLayer' (Refactor)
-     */
     async loadBoundaryLayer() {
         if (!this.myMap) return; 
         
         try {
-            // 1. Panggil helper
             const data = await this.fetchFromApi('/api/get-desa-bengkalis');
 
-            // 2. Buat layer GeoJSON
-            this.boundaryLayer = L.geoJSON(data.geojson, { // Ganti nama properti
+            this.boundaryLayer = L.geoJSON(data.geojson, { 
                 style: {
                     color: "#11d411", 
                     weight: 1,
@@ -428,7 +403,6 @@ export class SPAController {
                 }
             }).addTo(this.myMap);
             
-            // 3. Tambahkan ke toggle
             if (this.layerControl) {
                 this.layerControl.addOverlay(this.boundaryLayer, "Batas Kabupaten");
             } else {
@@ -442,7 +416,6 @@ export class SPAController {
         }
     }
 
-    // ... (Fungsi event handler GeoJSON tidak berubah) ...
     highlightFeature(e) {
         const layer = e.target;
         layer.setStyle({
@@ -454,14 +427,12 @@ export class SPAController {
         layer.bringToFront();
     }
     resetHighlight(e) {
-        // Ganti nama 'desaLayer'
         if (this.boundaryLayer) {
             this.boundaryLayer.resetStyle(e.target);
         }
     }
 
     zoomToFeature(e) {
-        // ... (Fungsi zoomToFeature() Anda tidak berubah) ...
         const layer = e.target;
         const properties = layer.feature.properties;
         const namaKab = properties.ADM2_NAME || 'Area Terpilih';
@@ -472,7 +443,4 @@ export class SPAController {
          .setContent(`<b>Kabupaten: ${namaKab}</b><br>Provinsi: ${namaProv}<br>ID: ${kodeKab}<br><br><button class="bg-primary text-background-dark px-3 py-1 rounded">Donasi (Waqf) untuk area ini</button>`)
          .openOn(this.myMap);
     }
-    // =================================
-    // AKHIR REFACTOR
-    // =================================
 }
