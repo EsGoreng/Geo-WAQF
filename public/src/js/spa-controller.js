@@ -8,7 +8,8 @@ export class SPAController {
         this.currentPage = null;
         this.cache = new Map();
         
-        this.apiBaseUrl = 'http://localhost:5000'; // Simpan URL API di satu tempat
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        this.apiBaseUrl = isLocal ? 'http://localhost:5000' : '';
         
         // Properti Peta & Layer
         this.myMap = null; 
