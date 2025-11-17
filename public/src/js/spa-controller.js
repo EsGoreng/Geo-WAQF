@@ -8,7 +8,7 @@ export class SPAController {
         this.currentPage = null;
         this.cache = new Map();
         
-        this.apiBaseUrl = 'https://geo-waqf.vercel.app';
+        this.apiBaseUrl = '';
         
         // Properti Peta & Layer
         this.myMap = null; 
