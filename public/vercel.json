@@ -4,7 +4,7 @@
     { "src": "app.py", "use": "@vercel/python" },
     { "src": "index.html", "use": "@vercel/static" },
     {
-      "src": "/src/(.*\\.(js|css|png|jpg|jpeg|gif|svg))$"
+      "src": "/src/(.*\\.(js|css|png|jpg|jpeg|gif|svg))$", "use": "@vercel/static"
     }
   ],
   "routes": [
