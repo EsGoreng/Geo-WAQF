@@ -1,11 +1,9 @@
 {
-  "functions": {
-    "app.py": {
-      "runtime": "python3.9"
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/app.py"
     }
-  },
-  "routes": [
-    { "src": "/api/app", "dest": "app.py" }
-  ],
-  "outputDirectory": "public"
+  ]
 }
