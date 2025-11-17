@@ -3,12 +3,11 @@
   "builds": [
     { "src": "app.py", "use": "@vercel/python" },
     { "src": "index.html", "use": "@vercel/static" },
-    {
-      "src": "/src/(.*\\.(js|css|png|jpg|jpeg|gif|svg))$", "use": "@vercel/static"
-    }
+    { "src": "src/**", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/api/(.*)", "dest": "/app.py" },
     { "src": "/", "dest": "/index.html" },
-    { "src": "/api/(.*)", "dest": "/app.py" }
+    { "handle": "filesystem" }
   ]
 }
